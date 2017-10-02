@@ -1,3 +1,5 @@
 #!/bin/bash 
 
+. script.conf
+
 git commit -a -m $LAZY_CONF_MSG && git push
