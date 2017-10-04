@@ -1,0 +1,81 @@
+#!/bin/bash 
+
+. script.conf
+
+ADD=false;
+PULL=false;
+CLEAN_PULL=false;
+SKIP_SELF=false;
+
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -a|-add)
+    ADD=true;
+    echo "Adding to git"
+    shift # past argument
+    ;;
+    -p|-pull)
+    PULL=true;
+    # SKIP_SELF=true;
+    echo "pull all"
+    shift # past argument
+    ;;
+    -cp|-cleanpull)
+    CLEAN_PULL=true;
+    SKIP_SELF=true;
+    echo "clean pull"
+    shift # past argument
+    ;;
+    # -s|--searchpath)
+    # SEARCHPATH="$2"
+    # shift # past argument
+    # shift # past value
+    # ;;
+    # -l|--lib)
+    # LIBPATH="$2"
+    # shift # past argument
+    # shift # past value
+    # ;;
+    # --default)
+    # DEFAULT=YES
+    # shift # past argument
+    # ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+
+
+for path in ${COMMIT_ALL_PATH//:/ }; do
+    cd "$path";
+
+    if $SKIP_SELF; then 
+        SKIP_SELF=false
+        continue
+    fi
+
+    echo -e "\e[46mGoing to --> $path\e[0m"
+
+    if $PULL; then 
+        git pull
+    elif CLEAN_PULL; then
+        echo "not implemented"
+    elif $ADD; then
+        git add .
+        gitpush
+    else
+        gitpush
+    fi
+
+    # if $ADD; then
+    #   git add .
+    # fi
+    # gitpush
+done
+
