@@ -4,7 +4,7 @@
 
 ADD=false;
 PULL=false;
-CLEAN_PULL=false;
+# CLEAN_PULL=false;
 SKIP_SELF=false;
 
 
@@ -24,12 +24,12 @@ case $key in
     echo "pull all"
     shift # past argument
     ;;
-    -cp|-cleanpull)
-    CLEAN_PULL=true;
-    SKIP_SELF=true;
-    echo "clean pull"
-    shift # past argument
-    ;;
+    # -cp|-cleanpull)
+    # CLEAN_PULL=true;
+    # SKIP_SELF=true;
+    # echo "clean pull"
+    # shift # past argument
+    # ;;
     # -s|--searchpath)
     # SEARCHPATH="$2"
     # shift # past argument
@@ -64,8 +64,8 @@ for path in ${COMMIT_ALL_PATH//:/ }; do
 
     if $PULL; then 
         git pull
-    elif CLEAN_PULL; then
-        echo "not implemented"
+    # elif CLEAN_PULL; then
+    #     echo "not implemented"
     elif $ADD; then
         git add .
         gitpush
