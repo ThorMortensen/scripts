@@ -1,36 +1,43 @@
 #!/bin/bash
+
 . globals
-# . script.conf
 
-THIS_REPO=$(dirs)
+# DEST_PATH=$SCRIPTS_DIR'/script.conf'
+# ruby scripts/raw_masc_cmd_connection.rb
 
+ruby $SCRIPTS_DIR'/autogit_add.rb' 
+
+# # . script.conf
 #
-# NEW_PATHS=$AUTO_COMMIT_PATHS':'$THIS_REPO
+# THIS_REPO=$(dirs)
 #
-# echo $NEW_PATHS > ~/scripts/autoGitRepoPahts.sh
-# echo $CUR_PATHS > autoGitRepoPahts.sh
-
-
-DEST_PATH=$SCRIPTS_DIR'/script.conf'
-# echo $DEST_PATH
-
-
-NEW_COMMIT_ALL_PATH=$(echo "$DEST_PATH" | grep "AUTO")
-
-# $AUTO_COMMIT_PATHS:$THIS_REPO
-
-
-
-echo $NEW_COMMIT_ALL_PATH
+# #
+# # NEW_PATHS=$AUTO_COMMIT_PATHS':'$THIS_REPO
+# #
+# # echo $NEW_PATHS > ~/scripts/autoGitRepoPahts.sh
+# # echo $CUR_PATHS > autoGitRepoPahts.sh
 #
-# [[ "$AUTO_COMMIT_PATHS" =~ ^"$HOME"(/|$) ]] && AUTO_COMMIT_PATHS="~${AUTO_COMMIT_PATHS#$HOME}"
 #
-# echo $AUTO_COMMIT_PATHS
-
-# echo $AUTO_COMMIT_PATHS
-# echo $NEW_COMMIT_ALL_PATH    AUTO_COMMIT_PATHS=.*
-
-# echo foo > $DEST_PATH
-
+# DEST_PATH=$SCRIPTS_DIR'/script.conf'
+# # echo $DEST_PATH
+#
+#
+# NEW_COMMIT_ALL_PATH=$(echo "$DEST_PATH" | grep "AUTO")
+#
+# # $AUTO_COMMIT_PATHS:$THIS_REPO
+#
+#
+#
+# echo $NEW_COMMIT_ALL_PATH
+# #
+# # [[ "$AUTO_COMMIT_PATHS" =~ ^"$HOME"(/|$) ]] && AUTO_COMMIT_PATHS="~${AUTO_COMMIT_PATHS#$HOME}"
+# #
+# # echo $AUTO_COMMIT_PATHS
+#
+# # echo $AUTO_COMMIT_PATHS
+# # echo $NEW_COMMIT_ALL_PATH    AUTO_COMMIT_PATHS=.*
+#
+# # echo foo > $DEST_PATH
+#
 # sed -i.bak "s|AUTO_COMMIT_PATHS=$AUTO_COMMIT_PATHS|AUTO_COMMIT_PATHS=$NEW_COMMIT_ALL_PATH|" $DEST_PATH #<$DEST_PATH >$DEST_PATH\_new
 # sed -i.bak 's/^\(AUTO_COMMIT_PATHS=\).*/\THIS_-REPO/' autoGitRepoPahts.sh
