@@ -9,12 +9,17 @@ AUTO_COMMIT_PATHS=~/scripts:~/afgangsprojekt_DTU_2017:~/.config/sublime-text-3/P
 
 
 
+
 ################################################
 #                Rovsing stuff
 ################################################
 ROV_IP=10.0.100.109
 ROV_HOME=~/rovsing
 
+
+########################
+#   Helper functions   #
+########################
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #              Helper functions

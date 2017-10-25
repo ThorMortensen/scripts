@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 . script.conf
 
@@ -52,17 +52,17 @@ esac
 done
 
 
-for path in ${COMMIT_ALL_PATH//:/ }; do
+for path in ${AUTO_COMMIT_PATHS//:/ }; do
     cd "$path";
 
-    if $SKIP_SELF; then 
+    if $SKIP_SELF; then
         SKIP_SELF=false
         continue
     fi
 
     echo -e "\e[46mGoing to --> $path\e[0m"
 
-    if $PULL; then 
+    if $PULL; then
         git pull
     # elif CLEAN_PULL; then
     #     echo "not implemented"
@@ -78,4 +78,3 @@ for path in ${COMMIT_ALL_PATH//:/ }; do
     # fi
     # gitpush
 done
-

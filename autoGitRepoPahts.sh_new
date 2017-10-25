@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+
+AUTO_COMMIT_PATHS=/home/thor/scripts:/home/thor/afgangsprojekt_DTU_2017:/home/thor/.config/sublime-text-3/Packages/User:~/foo

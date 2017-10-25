@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 . autoGitRepoPahts.sh
 
@@ -10,4 +10,4 @@ NEW_PATHS=$COMMIT_ALL_PATH':'$THIS_REPO
 echo $CUR_PATHS
 # echo $CUR_PATHS > autoGitRepoPahts.sh
 
-# sed -i.bak 's/^\(COMMIT_ALL_PATH=\).*/\THIS_REPO/' autoGitRepoPahts.sh
+# sed -i.bak 's/^\(COMMIT_ALL_PATH=\).*/\THIS_-REPO/' autoGitRepoPahts.sh

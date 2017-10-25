@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sed -i.bak 's@^\(COMMIT_ALL_PATH=\).@*\THIS_REPO@' $DEST_PATH
+# sed -i.bak 's/^\(COMMIT_ALL_PATH=\).*/\THIS_-REPO/' autoGitRepoPahts.sh
