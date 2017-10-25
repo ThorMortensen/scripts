@@ -5,7 +5,7 @@
 # DEST_PATH=$SCRIPTS_DIR'/script.conf'
 # ruby scripts/raw_masc_cmd_connection.rb
 
-ruby $SCRIPTS_DIR'/autogit_add.rb' 
+ruby -W0 $SCRIPTS_DIR'/autogit.rb' #$HOME
 
 # # . script.conf
 #
