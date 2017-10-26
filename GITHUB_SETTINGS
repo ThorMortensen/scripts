@@ -9,9 +9,9 @@
 ##################################################
 
 
-GITHUB_ACCESS_TOKEN: # --- token here ---
+GITHUB_ACCESS_TOKEN: tokenbar # --- token here ---
 
-GITHUB_USERNAME:     # --- username here ----
+GITHUB_USERNAME: foobar  # --- username here ----
 
 # !!!!! REMEBER TO ADD TO .gitignore !!!!!!!
 # Else token will be rendered invalid !!!!!
