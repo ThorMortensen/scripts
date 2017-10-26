@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="" />
+    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/GITHUB_SETTINGS" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,8 +28,8 @@
       <file leaf-file-name="GITHUB_SETTINGS" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GITHUB_SETTINGS">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="216">
+              <caret line="12" column="22" lean-forward="false" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -175,6 +178,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="last_opened_file_path" value="$USER_HOME$/workspace_257" />
     <property name="project.settings.patched" value="true" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/GITHUB_SETTINGS" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -208,12 +212,12 @@
       <workItem from="1508938129311" duration="9814000" />
       <workItem from="1508952736623" duration="11209000" />
       <workItem from="1509034615952" duration="2169000" />
-      <workItem from="1509036792041" duration="2678000" />
+      <workItem from="1509036792041" duration="3039000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29019000" />
+    <option name="totallyTimeSpent" value="29380000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1576" y="313" width="1873" height="1092" extended-state="6" />
@@ -507,8 +511,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GITHUB_SETTINGS">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="216">
+          <caret line="12" column="22" lean-forward="false" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
           <folding />
         </state>
       </provider>
