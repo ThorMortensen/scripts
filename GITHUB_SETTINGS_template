@@ -1,13 +1,14 @@
-##################################################
+###########################################################
 #
-#   This is the settings for Github.
+#   This is the settings template for Github.
 #
-#   Add a Github username and access token.
+#   COPY THIS TO A NEW FILE CALLED " GITHUB_SETTINGS "
+#
+#   Add a Github username and access token to the new file
 #   The token must have repo rights
 #
-#   COPY THIS TO A NEW FILE CALLED GITHUB_SETTINGS
 #
-##################################################
+###########################################################
 
 
 GITHUB_ACCESS_TOKEN:
