@@ -4,7 +4,6 @@
 #
 #   Add a Github username and access token below.
 #   The token must have repo rights
-#   Add this file to .gitignore
 #
 ##################################################
 
@@ -13,5 +12,4 @@ GITHUB_ACCESS_TOKEN: # --- token here ---
 
 GITHUB_USERNAME: # --- username here ----
 
-# !!!!! REMEBER TO ADD TO .gitignore !!!!!!!
-# Else token will be rendered invalid !!!!!  git update-index --assume-unchanged path/to/file
+
