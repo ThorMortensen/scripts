@@ -56,7 +56,7 @@ def makeRemoteGitRepo
     puts 'No "GITHUB_SETTINGS.yml" file found'.red
     puts 'make one now? [Y/n]'.bg_magenta.black
     if gets()[/[^n]/]
-      puts "Please enter your Github #{'Username'.bold} ".bg_magenta.black
+      puts "Please enter your Github #{'Username'.bold.black} ".bg_magenta.black
       print '~> '
       userInputEmail = gets
       puts "Please enter your Github access #{'Token'.bold} ".bg_magenta.black
@@ -98,7 +98,7 @@ def makeRemoteGitRepo
 
     if response.code == "422"
       puts "Remote #{respBody["message"]}".red
-      puts "Remote repo name \"#{newRemoteRepoName.bold}\" may already be in use.".bg_magenta.black
+      puts "Remote repo name \"#{newRemoteRepoName.bold.black}\" may already be in use.".bg_magenta.black
       puts "Try another name OR leave empty to skip remote repo creation".bg_magenta.black
       print "~> "
       newRemoteRepoName = gets
@@ -272,16 +272,16 @@ def autogitCommitAndPush
     begin
       Dir.chdir pathToGit
     rescue SystemCallError
-      puts "Autogit path \"#{pathToGit.bold}\" not valid. Please remove it at some point".black.bg_red
+      puts "Autogit path \"#{pathToGit}\" not valid. Please remove it at some point".black.bg_red
       next
     end
 
-    puts "Commit and push ~~> #{pathToGit.bold}".black.bg_green
+    puts "Commit and push ~~> #{pathToGit}".black.bg_green
 
-    gitStatus = `git commit -m "this is not a message (lazy commit)"`
+    gitStatus = `git commit -a -m "this is not a message (lazy commit)"`
 
     if gitStatus.empty?
-      puts "Autogit path \"#{pathToGit.bold}\" has no git repo".red
+      puts "Autogit path \"#{pathToGit}\" has no git repo".red
       puts 'Make repo via git or use +autogit_add'.cyan
       next
     else
@@ -308,10 +308,10 @@ def autogitPull
     begin
       Dir.chdir pathToGit
     rescue SystemCallError
-      puts "Input path \"#{pathToGit.bold}\" not valid. Please remove it at some point".black.bg_red
+      puts "Input path \"#{pathToGit.bold.black}\" not valid. Please remove it at some point".black.bg_red
       next
     end
-    puts "Pull ~~> #{pathToGit.bold}".black.bg_green
+    puts "Pull ~~> #{pathToGit.bold.black}".black.bg_green
     remoteStatus = `git pull`
     if remoteStatus.empty?
       puts 'No remote repo for this entry'.red

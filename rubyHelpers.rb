@@ -68,7 +68,7 @@ end
 #@formatter:off
   class String
     def white;          "\e[30m#{self}\e[0m" end
-    def black;          "\e[97m#{self}\e[0m" end
+    def black;          "\e[30m#{self}\e[0m" end
     def red;            "\e[31m#{self}\e[0m" end
     def green;          "\e[32m#{self}\e[0m" end
     def greenLight;     "\e[92m#{self}\e[0m" end
@@ -95,4 +95,3 @@ end
     def reverse_color;  "\e[7m#{self}\e[27m" end
   end
 #@formatter:on
-
