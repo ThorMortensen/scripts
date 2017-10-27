@@ -21,7 +21,7 @@ AUTO_ADD_PATHS = "AUTO_ADD_PATHS"
 
 
 def exitPoint
-  puts "Thank you for using one of Thor's QOF scripts. Exerting..".green
+  puts "\nEnjoy life. Enjoy QOF scripts . Exerting..".green
   exit()
 end
 
@@ -56,10 +56,16 @@ def makeRemoteGitRepo
     puts 'No "GITHUB_SETTINGS.yml" file found'.red
     puts 'make one now? [Y/n]'.bg_magenta.black
     if gets()[/[^n]/]
+      puts 'Now creating the "GITHUB_SETTINGS.yml" that should not be shared!'.yellow
+      puts 'MAKE SURE "GITHUB_SETTINGS.yml" IS IN .gitignore OR THE TOKEN WILL BE REVOKED'.yellow
+      puts
       puts "Please enter your Github #{'Username'.bold.black} ".bg_magenta.black
       print '~> '
       userInputEmail = gets
       puts "Please enter your Github access #{'Token'.bold} ".bg_magenta.black
+      puts "See:"
+      puts "  https://github.com/blog/1509-personal-api-tokens".gray
+      puts
       print '~> '
       userInputToken = gets
 
@@ -205,55 +211,120 @@ def setNewPaths(newPaths)
   File.open(autogitPathYaml, 'w') {|f| YAML.dump(newPaths, f)}
 end
 
-def autogit_add(pathToAdd)
+
+def gotoNewDir(dir, stopOnFail = true)
 
   begin
-    Dir.chdir pathToAdd unless pathToAdd.nil?
+    Dir.chdir dir
   rescue SystemCallError
-    puts "Input path \"#{pathToAdd.bold}\" not valid".red
-    exitPoint
+    puts "Input path \"#{dir.bold}\" not valid".red
+    exitPoint if stopOnFail
+  end
+
+  return Dir.pwd
+
+end
+
+# @param [string] arg1
+# @param [string] arg2
+# @return [string]
+def autogit_add(arg1 = nil, arg2 = nil)
+
+  pathsToModefy = AUTO_COMMIT_PATHS
+  mode = 'autogit'
+
+  newAutogitPath = homeToTilde(Dir.pwd)
+
+  unless arg1.nil?
+    if arg1 == '-a'
+      mode = :'autogit-add'
+      pathsToModefy = AUTO_ADD_PATHS
+    else
+      newAutogitPath = homeToTilde(gotoNewDir(arg1))
+    end
+  end
+
+  unless arg2.nil?
+    if arg2 == '-a'
+      mode = :'autogit-add'
+      pathsToModefy = AUTO_ADD_PATHS
+    else
+      newAutogitPath = homeToTilde(gotoNewDir(arg1))
+    end
   end
 
   paths = getCurrentPaths
 
-  newAutogitPath = checkForGitRepo
+  if mode == 'autogit'
+    newAutogitPath = checkForGitRepo
+  else
+    if paths[AUTO_COMMIT_PATHS].nil? or !paths[AUTO_COMMIT_PATHS].include? newAutogitPath
+      puts "Path is currently not in autogit. It make no sense to include it in autogit-add".red
+      puts "Add to autogit? [Y/n]".bg_brown.black
+      if gets['n']
+        exitPoint()
+      end
+      newAutogitPath = autogit_add
+      paths = getCurrentPaths
+    end
+  end
 
-  if paths[AUTO_COMMIT_PATHS].nil?
-    paths[AUTO_COMMIT_PATHS] = [newAutogitPath]
-  elsif paths[AUTO_COMMIT_PATHS].include? newAutogitPath
-    puts "Path already added to autogit".red
+  if paths[pathsToModefy].nil?
+    paths[pathsToModefy] = [newAutogitPath]
+  elsif paths[pathsToModefy].include? newAutogitPath
+    puts "Path already added to #{mode}".red
     exitPoint
   else
-    paths[AUTO_COMMIT_PATHS].push(newAutogitPath)
+    paths[pathsToModefy].push(newAutogitPath)
   end
 
   setNewPaths(paths)
 
-  puts "Path \"#{newAutogitPath.bold}\" successfully added to autocommit ".green
-  exitPoint
+  puts "Path \"#{newAutogitPath.bold}\" successfully added to #{mode} ".green
 
+  return newAutogitPath
 end
 
-def autogit_remove(pathToAdd)
+# @param [string] arg1
+# @param [string] arg2
+def autogit_remove(arg1 = nil, arg2 = nil)
+
+  pathsToModefy = AUTO_COMMIT_PATHS
+  mode = 'autogit'
 
 
-  pathToRemove = homeToTilde(pathToAdd || Dir.pwd)
+  unless arg1.nil?
+    if arg1 == '-a'
+      mode = :'autogit-add'
+      pathsToModefy = AUTO_ADD_PATHS
+      arg1 = nil
+    else
+      gotoNewDir(arg1)
+    end
+  end
 
+  unless arg2.nil?
+    if arg2 == '-a'
+      mode = :'autogit-add'
+      pathsToModefy = AUTO_ADD_PATHS
+    else
+      arg1 = nil
+      gotoNewDir(arg2)
+    end
+  end
+
+  pathToRemove = homeToTilde(arg1 || Dir.pwd)
   paths = getCurrentPaths
 
-  if paths[AUTO_COMMIT_PATHS].nil?
-    puts "Path \"#{pathToRemove.bold}\" is currently not in aoutogit".green
-  elsif not paths[AUTO_COMMIT_PATHS].delete(pathToRemove)
-    puts "Path \"#{pathToRemove.bold}\" is currently not in aoutogit".green
+  if paths[pathsToModefy].nil? or not paths[pathsToModefy].delete(pathToRemove)
+    puts "Path \"#{pathToRemove.bold}\" is currently not in #{mode}".green
   else
-    puts "Path \"#{pathToRemove.bold}\" successfully removed from autogit".green
+    puts "Path \"#{pathToRemove.bold}\" successfully removed from #{mode}".green
   end
 
   setNewPaths(paths)
-  exitPoint
 
 end
-
 
 def autogitCommitAndPush
 
@@ -276,16 +347,21 @@ def autogitCommitAndPush
       next
     end
 
+    if paths[AUTO_ADD_PATHS].include? path
+      puts "Adding all new files to git ~~> #{pathToGit}".black.bg_yell
+      puts `git add . `
+    end
+
     puts "Commit and push ~~> #{pathToGit}".black.bg_green
 
-    gitStatus = `git commit -a -m "this is not a message (lazy commit)"`
+    gitStatus = `git commit -a -m "This is not a message (lazy commit)"`
 
     if gitStatus.empty?
       puts "Autogit path \"#{pathToGit}\" has no git repo".red
       puts 'Make repo via git or use +autogit_add'.cyan
       next
     else
-      puts gitStatus.gray
+      puts gitStatus
     end
 
     puts `git push`
@@ -303,7 +379,7 @@ def autogitPull
     exitPoint
   end
 
-  paths[AUTO_COMMIT_PATHS].each{|path|
+  paths[AUTO_COMMIT_PATHS].each {|path|
     pathToGit = tildeToHome(path)
     begin
       Dir.chdir pathToGit
@@ -317,7 +393,7 @@ def autogitPull
       puts 'No remote repo for this entry'.red
       puts 'Add remote repo via git or use +autogit_add to add remote support'.cyan
     else
-      puts remoteStatus.gray
+      puts remoteStatus
     end
   }
 
@@ -325,22 +401,22 @@ def autogitPull
 end
 
 
-
 ################################################
 #               MAIN
 ################################################
 
 runMode = ARGV[0]
-pathArg = ARGV[1]
+arg1 = ARGV[1]
+arg2 = ARGV[2]
 ARGV.clear
 
 
 case runMode
   when 'add'
-    autogit_add(pathArg)
+    autogit_add(arg1, arg2)
 
   when 'remove'
-    autogit_remove(pathArg)
+    autogit_remove(arg1, arg2)
 
   when 'pull'
     autogitPull
@@ -349,3 +425,6 @@ case runMode
     autogitCommitAndPush
 
 end
+exitPoint
+
+

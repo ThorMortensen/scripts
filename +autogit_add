@@ -2,6 +2,4 @@
 
 . globals
 
-
-ruby -W0 $SCRIPTS_DIR'/autogit.rb' add $1
-
+ruby -W0 $SCRIPTS_DIR'/autogit.rb' add $1 $2

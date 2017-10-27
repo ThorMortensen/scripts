@@ -2,4 +2,4 @@
 
 . globals
 
-ruby -W0 $SCRIPTS_DIR'/autogit.rb' remove $1
+ruby -W0 $SCRIPTS_DIR'/autogit.rb' remove $1 $2
