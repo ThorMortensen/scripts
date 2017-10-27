@@ -4,3 +4,4 @@ AUTO_COMMIT_PATHS:
 - "~/scripts"
 AUTO_ADD_PATHS:
 - "~/bar"
+- "~/scripts"
