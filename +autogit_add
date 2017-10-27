@@ -2,42 +2,6 @@
 
 . globals
 
-# DEST_PATH=$SCRIPTS_DIR'/script.conf'
-# ruby scripts/raw_masc_cmd_connection.rb
 
-ruby -W0 $SCRIPTS_DIR'/autogit.rb' #$HOME
+ruby -W0 $SCRIPTS_DIR'/autogit.rb' add $1
 
-# # . script.conf
-#
-# THIS_REPO=$(dirs)
-#
-# #
-# # NEW_PATHS=$AUTO_COMMIT_PATHS':'$THIS_REPO
-# #
-# # echo $NEW_PATHS > ~/scripts/autoGitRepoPahts.sh
-# # echo $CUR_PATHS > autoGitRepoPahts.sh
-#
-#
-# DEST_PATH=$SCRIPTS_DIR'/script.conf'
-# # echo $DEST_PATH
-#
-#
-# NEW_COMMIT_ALL_PATH=$(echo "$DEST_PATH" | grep "AUTO")
-#
-# # $AUTO_COMMIT_PATHS:$THIS_REPO
-#
-#
-#
-# echo $NEW_COMMIT_ALL_PATH
-# #
-# # [[ "$AUTO_COMMIT_PATHS" =~ ^"$HOME"(/|$) ]] && AUTO_COMMIT_PATHS="~${AUTO_COMMIT_PATHS#$HOME}"
-# #
-# # echo $AUTO_COMMIT_PATHS
-#
-# # echo $AUTO_COMMIT_PATHS
-# # echo $NEW_COMMIT_ALL_PATH    AUTO_COMMIT_PATHS=.*
-#
-# # echo foo > $DEST_PATH
-#
-# sed -i.bak "s|AUTO_COMMIT_PATHS=$AUTO_COMMIT_PATHS|AUTO_COMMIT_PATHS=$NEW_COMMIT_ALL_PATH|" $DEST_PATH #<$DEST_PATH >$DEST_PATH\_new
-# sed -i.bak 's/^\(AUTO_COMMIT_PATHS=\).*/\THIS_-REPO/' autoGitRepoPahts.sh

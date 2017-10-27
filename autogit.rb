@@ -8,81 +8,121 @@ require_relative 'rubyHelpers.rb'
 require 'net/http'
 require 'uri'
 require 'json'
+require 'yaml'
 
 
-NEW_PATH_GET_GIT_CMD = "git rev-parse --show-toplevel"
+@homePath = `echo $HOME` #ARGV[0]
+@homePath["\n"] = ""
 
-$homePath = `echo $HOME` #ARGV[0]
-scriptFolderPath = File.dirname(__FILE__)
-scriptConfFilePath = "#{scriptFolderPath}/script.conf"
+SCRIPTS_FOLDER_PATH = File.dirname(__FILE__)
+
+AUTO_COMMIT_PATHS = "AUTO_COMMIT_PATHS"
+AUTO_ADD_PATHS = "AUTO_ADD_PATHS"
 
 
 def exitPoint
-  puts "Thank you for using one of Thor's QOF scripts. Exerting...".bold.magenta
+  puts "Thank you for using one of Thor's QOF scripts. Exerting..".green
   exit()
 end
 
 # @param [string] repoName
+# @param [string] githubUsername
+# @param [string] githubToken
 # @return [Net::Net::HTTP]
-def makeGithubRepo(repoName)
+def makeGithubRepo(repoName, githubUsername, githubToken)
   uri = URI.parse('https://api.github.com/user/repos')
   request = Net::HTTP::Post.new(uri)
-  request.basic_auth('send.tilmig@gmail.com', 'f5e43333c5b9f00206f54ac1f778da221ca6ca7e')
+  request.basic_auth(githubUsername, githubToken)
   request.body = JSON.dump("name" => "#{repoName}")
 
-  req_options = { use_ssl: uri.scheme == 'https' }
+  req_options = {use_ssl: uri.scheme == 'https'}
 
   response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
     http.request(request)
   end
-  
+
   return response
-  
+
 end
 
 
 def makeRemoteGitRepo
 
-  newRemoteRepoName = Dir.pwd
-  newRemoteRepoName = newRemoteRepoName.split("/").last
-  puts
-  puts "Remote repo will get this name ".bg_magenta.black
-  puts
-  puts "#{newRemoteRepoName}".bold
-  puts
-  puts "Type another name OR leave empty".bg_magenta.black
-  print"~> "
-  userInput = gets
+  begin
 
-  newRemoteRepoName = userInput unless userInput[/^\n/]
+    userInfo = YAML.load_file("#{SCRIPTS_FOLDER_PATH}/GITHUB_SETTINGS.yml")
 
-  puts "Going with this name #{newRemoteRepoName.to_s.green}"
+  rescue SystemCallError
+    puts 'No "GITHUB_SETTINGS.yml" file found'.red
+    puts 'make one now? [Y/n]'.bg_magenta.black
+    if gets()[/[^n]/]
+      puts "Please enter your Github #{'Username'.bold} ".bg_magenta.black
+      print '~> '
+      userInputEmail = gets
+      puts "Please enter your Github access #{'Token'.bold} ".bg_magenta.black
+      print '~> '
+      userInputToken = gets
 
-  puts "Makeing remote repo".cyan
-
-  response = makeGithubRepo(newRemoteRepoName)
-
-  respBody = JSON.parse(response.body)
-  
-  if response.code == 422
-    puts "#{respBody["message"]}".red
+      File.write("#{SCRIPTS_FOLDER_PATH}/GITHUB_SETTINGS_2.yml",
+                 "GITHUB_ACCESS_TOKEN: #{userInputToken}\nGITHUB_USERNAME: #{userInputEmail}")
+    end
   end
 
-  puts "response code #{response.code}"
+  githubUsername = userInputEmail || userInfo["GITHUB_USERNAME"]
+  githubToken = userInputToken || userInfo["GITHUB_ACCESS_TOKEN"]
 
-  # puts "response url body -> #{response.body}"
-  # puts "response JSON body -> #{respBody["id"]}"
+  newRemoteRepoName = Dir.pwd
+  newRemoteRepoName = newRemoteRepoName.split("/").last
 
+  puts "Remote repo will get this name: ".bg_magenta.black
+  puts
+  puts "  #{newRemoteRepoName}".bold
+  puts
+  puts "Enter another name OR leave empty".bg_magenta.black
+  print "~> "
+  userInput = gets
 
-  puts "response html_url addr -> #{respBody["html_url"]}"
-  puts "response ssh addr -> #{respBody["ssh_url"]}"
+  userInput["\n"] = ""
 
+  newRemoteRepoName = userInput unless userInput.empty?
 
+  puts "Creating remote repo".cyan
 
-  # puts response. #.to_s.gray
+  remoteRepoFailed = true
+  abortRepoCration = false
 
+  while remoteRepoFailed
 
-  exitPoint
+    response = makeGithubRepo(newRemoteRepoName, githubUsername, githubToken)
+    respBody = JSON.parse(response.body)
+
+    if response.code == "422"
+      puts "Remote #{respBody["message"]}".red
+      puts "Remote repo name \"#{newRemoteRepoName.bold}\" may already be in use.".bg_magenta.black
+      puts "Try another name OR leave empty to skip remote repo creation".bg_magenta.black
+      print "~> "
+      newRemoteRepoName = gets
+      newRemoteRepoName["\n"] = ""
+      if newRemoteRepoName.empty?
+        puts "Aborting remote repo creation".cyan
+        abortRepoCration = true
+        break
+      end
+      next
+    end
+
+    remoteRepoFailed = false
+
+  end
+
+  unless abortRepoCration
+    puts "Remote repo was successfully created. It can be found here: ".green
+    puts
+    puts "  #{respBody["html_url"]}"
+    puts
+  end
+
+  return respBody["ssh_url"]
 end
 
 
@@ -90,76 +130,187 @@ def createGitRepo
 
   puts "Auto make remote repo? [Y/n]".bg_blue.black
 
-  unless gets()['n']
-    makeRemoteGitRepo
+  userSays = gets()
+
+  if userSays[/^\n/]
+    remote = makeRemoteGitRepo
   end
 
-  puts "Add remote repo OR leave empty for local repo only".bg_blue.black
-  print "~> "
-  remote = gets.chomp
-  unless remote.empty?
-    remote = "git remote add origin #{remote}"
-    puts
-    puts "Remote repo is correct?".bg_blue.black
-    puts
-    puts "#{remote}".bold
-    puts
-    print "[Y/n] "
-    if gets()['n']
-      exitPoint()
+  if userSays['n'] or remote.nil? or remote.empty?
+
+    puts "Add remote repo OR leave empty for local repo only".bg_blue.black
+    print "~> "
+    remote = gets.chomp
+    unless remote.empty?
+      remote = "#{remote}"
+      puts
+      puts "Remote repo is correct?".bg_blue.black
+      puts
+      puts "#{remote}".bold
+      puts
+      print "[Y/n] "
+      if gets()['n']
+        exitPoint()
+      end
     end
-  end
 
+  end
 
   puts "Creating new git repo:".cyan
   puts `git init && git add . && git commit -m "initial commit"`.gray
 
   unless remote.empty?
     puts "Linking repo to remote:".cyan
-    puts `#{remote} && git push -u origin master`.gray
+    puts `git remote add origin #{remote} && git push -u origin master`.gray
   end
 
   return Dir.pwd
 
 end
 
+def homeToTilde(path)
+  return path.gsub(@homePath, "~")
+end
+
+def tildeToHome(path)
+  return path.gsub("~", @homePath)
+end
 
 def checkForGitRepo
 
-  gitBasePath = `#{NEW_PATH_GET_GIT_CMD}`
+  gitBasePath = `git rev-parse --show-toplevel`
 
-  if gitBasePath == ""
+  if gitBasePath.empty?
     puts "No git repo found.".red
     puts "Make one now? [Y/n]".bg_brown.black
     if gets['n']
       exitPoint()
     end
     gitBasePath = createGitRepo()
+  else
+    gitBasePath["\n"] = ""
   end
-  return gitBasePath.gsub!($homePath, "~")
+
+  return homeToTilde(gitBasePath)
+
 end
 
+def getCurrentPaths
+  autogitPathYaml = "#{SCRIPTS_FOLDER_PATH}/autogit_paths.yml"
+  return YAML.load_file(autogitPathYaml)
+end
 
-newRepoPath = checkForGitRepo
+def setNewPaths(newPaths)
+  autogitPathYaml = "#{SCRIPTS_FOLDER_PATH}/autogit_paths.yml"
+  File.open(autogitPathYaml, 'w') {|f| YAML.dump(newPaths, f)}
+end
 
-text = File.read(scriptConfFilePath)
+def autogit_add(pathToAdd)
 
+  begin
+    Dir.chdir pathToAdd unless pathToAdd.nil?
+  rescue SystemCallError
+    puts "Input path not valid".red
+    exitPoint
+  end
 
-# puts "The file is:".red
-# puts
-# puts text
+  paths = getCurrentPaths
 
-oldAutoCommitPath = text[/AUTO_COMMIT_PATHS=.*/]
+  newAutogitPath = checkForGitRepo
 
-if oldAutoCommitPath[newRepoPath]
-  puts "This repo is already added in paths".red
+  if paths[AUTO_COMMIT_PATHS].nil?
+    paths[AUTO_COMMIT_PATHS] = [newAutogitPath]
+  elsif paths[AUTO_COMMIT_PATHS].include? newAutogitPath
+    puts "Path already added to autogit".red
+    exitPoint
+  else
+    paths[AUTO_COMMIT_PATHS].push(newAutogitPath)
+  end
+
+  setNewPaths(paths)
+
+  puts "Path \"#{newAutogitPath.bold}\" successfully added to autocommit ".green
   exitPoint
+
 end
 
-newAutoCommitPath = "#{oldAutoCommitPath}:#{newRepoPath}"
+def autogit_remove(pathToAdd)
 
-puts "old -> #{oldAutoCommitPath}"
-puts "new -> #{newAutoCommitPath}"
+
+  pathToRemove = homeToTilde(pathToAdd || Dir.pwd)
+
+
+  paths = getCurrentPaths
+
+  if paths[AUTO_COMMIT_PATHS].nil?
+    puts "Path \"#{pathToRemove.bold}\" is currently not in aoutogit".green
+  elsif not paths[AUTO_COMMIT_PATHS].delete(pathToRemove)
+    puts "Path \"#{pathToRemove.bold}\" is currently not in aoutogit".green
+  else
+    puts "Path \"#{pathToRemove.bold}\" successfully removed from autogit".green
+  end
+
+  setNewPaths(paths)
+  exitPoint
+
+end
+
+
+def autogitCommitAndPush
+
+
+
+  begin
+    Dir.chdir pathToAdd unless pathToAdd.nil?
+  rescue SystemCallError
+    puts "Input path not valid".red
+    exitPoint
+  end
+
+end
+
+
+################################################
+#               MAIN
+################################################
+
+runMode = ARGV[0]
+pathArg = ARGV[1]
+ARGV.clear
+
+
+case runMode
+  when 'add'
+    autogit_add(pathArg)
+
+  when 'remove'
+    autogit_remove(pathArg)
+  else
+    puts "Not sported mode. Did you forget script arguments?"
+
+end
+
+
+# newRepoPath = checkForGitRepo
+#
+# text = File.read(scriptConfFilePath)
+#
+#
+# # puts "The file is:".red
+# # puts
+# # puts text
+#
+# oldAutoCommitPath = text[/AUTO_COMMIT_PATHS=.*/]
+#
+# if oldAutoCommitPath[newRepoPath]
+#   puts "This repo is already added in paths".red
+#   exitPoint
+# end
+#
+# newAutoCommitPath = "#{oldAutoCommitPath}:#{newRepoPath}"
+#
+# puts "old -> #{oldAutoCommitPath}"
+# puts "new -> #{newAutoCommitPath}"
 
 
 # new_contents = text.gsub(/search_regexp/, "replacement string")
@@ -169,18 +320,6 @@ puts "new -> #{newAutoCommitPath}"
 
 # To write changes to the file, use:
 # File.open(file_name, "w") {|file| file.puts new_contents }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # {
