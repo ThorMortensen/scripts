@@ -211,7 +211,6 @@ def setNewPaths(newPaths)
   File.open(autogitPathYaml, 'w') {|f| YAML.dump(newPaths, f)}
 end
 
-
 def gotoNewDir(dir, stopOnFail = true)
 
   begin
