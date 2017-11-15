@@ -3,7 +3,11 @@ AUTO_COMMIT_PATHS:
 - "~/scripts"
 - "~/afgangsprojekt_DTU_2017"
 - "~/02203 Design af digitale systemer "
+- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/drivers/rovsing/ad_generic"
+- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/include/rovsing"
 AUTO_ADD_PATHS:
 - "~/scripts"
 - "~/afgangsprojekt_DTU_2017"
 - "~/02203 Design af digitale systemer "
+- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/drivers/rovsing/ad_generic"
+- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/include/rovsing"

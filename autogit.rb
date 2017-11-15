@@ -69,7 +69,7 @@ def makeRemoteGitRepo
       print '~> '
       userInputToken = gets
 
-      File.write("#{SCRIPTS_FOLDER_PATH}/GITHUB_SETTINGS_2.yml",
+      File.write("#{SCRIPTS_FOLDER_PATH}/GITHUB_SETTINGS.yml",
                  "GITHUB_ACCESS_TOKEN: #{userInputToken}\nGITHUB_USERNAME: #{userInputEmail}")
     end
   end
@@ -104,7 +104,7 @@ def makeRemoteGitRepo
 
     if response.code == "422"
       puts "Remote #{respBody["message"]}".red
-      puts "Remote repo name \"#{newRemoteRepoName.bold.black}\" may already be in use.".bg_magenta.black
+      puts "Remote repo name \"#{newRemoteRepoName.bold}\" may already be in use.".bg_magenta.black
       puts "Try another name OR leave empty to skip remote repo creation".bg_magenta.black
       print "~> "
       newRemoteRepoName = gets
