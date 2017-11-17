@@ -6,6 +6,7 @@ AUTO_COMMIT_PATHS:
 - "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/drivers/rovsing/ad_generic"
 - "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/include/rovsing"
 - "~/pi"
+- "~/embedded_wireless_systems"
 AUTO_ADD_PATHS:
 - "~/scripts"
 - "~/afgangsprojekt_DTU_2017"
