@@ -373,13 +373,7 @@ end
 ##############################################
 #		Run
 ##############################################
-
-@mascIp = "192.168.52.25"
+@mascIp = ARGV[0]
+ARGV.clear
 raw = RawMascCmdConnection.new(@mascIp)
 raw.startManualMode
-
-
-
-
-
-

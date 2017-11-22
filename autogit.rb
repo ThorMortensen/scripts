@@ -342,7 +342,7 @@ def autogitCommitAndPush
     begin
       Dir.chdir pathToGit
     rescue SystemCallError
-      puts "Autogit path \"#{pathToGit}\" not valid. Please remove it at some point".black.bg_red
+      puts "Autogit path \"#{pathToGit}\" not valid.".gray
       next
     end
 
@@ -383,7 +383,7 @@ def autogitPull
     begin
       Dir.chdir pathToGit
     rescue SystemCallError
-      puts "Input path \"#{pathToGit.bold.black}\" not valid. Please remove it at some point".black.bg_red
+      puts "Input path \"#{pathToGit}\" not valid.".gray
       next
     end
     puts "Pull ~~> #{pathToGit.bold.black}".black.bg_green
