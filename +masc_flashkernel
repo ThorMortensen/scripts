@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+. globals
+cd $SCRIPTS_DIR
+
 . bash_helper_functions.sh
 
 checkAndSetIP_arg_masc $1
