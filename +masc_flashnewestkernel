@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cd ~/workspace/223_SAS/
+cd $(ls -td -- */ | head -n 1)
+cd $(ls -td -- */ | head -n 1)
