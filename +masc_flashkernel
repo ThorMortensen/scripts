@@ -18,3 +18,4 @@ echo "Active IP is $MASC_IP"
 cd $WORKING_DIR
 
 _deployGeneric -tmasc -wkernel-FPU_preCompiledLib -slocal -b$MASC_DEV -i$MASC_DEV
+beep

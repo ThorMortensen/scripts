@@ -3,4 +3,5 @@
 . globals
 
 ruby -W0 $SCRIPTS_DIR'/autogit.rb' pull
- 
+
+beep
