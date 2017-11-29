@@ -33,4 +33,15 @@ export GOPATH=~/go
 . ~/scripts/bashrc_stuff
 
 
+#### Install Oh my ZSH
+
+sudo apt-get install zsh
+chsh -s $(which zsh)
+
+# Log in and out
+
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+# Add to ~/.zshrc before the "source $ZSH/oh-my-zsh.sh" line 
+source ~/scripts/zshrc_stuff
