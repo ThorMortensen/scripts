@@ -1,18 +1,11 @@
 #!/usr/bin/env bash
 
-wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-
-mv PowerlineSymbols.otf /usr/share/fonts/
-
-fc-cache -vf /usr/share/fonts/
-mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
 
 ### Install powerline
 
-
-
+sudo apt install powerline
+udo apt install fonts-powerline
 mkdir -p ~/.config/powerline
 cat <<-'EOF' > ~/.config/powerline/config.json
 {
@@ -24,3 +17,16 @@ cat <<-'EOF' > ~/.config/powerline/config.json
 }
 EOF
 powerline-daemon --replace
+
+
+
+
+### bashrc settings
+
+######## My stuff ######
+
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export PATH=$PATH:~/intelFPGA_pro/17.0/modelsim_ase/bin:~/scripts:/home/thor/.cargo/bin:/usr/local/go/bin
+export GOPATH=~/go
+
+. ~/scripts/bashrc_stuff
