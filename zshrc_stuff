@@ -5,7 +5,19 @@
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+
+# source ~/.fonts/*.sh
+
+# POWERLEVEL9K_MODE='awesome-patched'
+
+
 ZSH_THEME="robbyrussell"
+
+# POWERLEVEL9K_MODE='awesome-patched'
+
+# Ubuntu Mono 13
+
+# POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -58,8 +70,26 @@ COMPLETION_WAITING_DOTS="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  svn
+  autojump
   zsh-autosuggestions
 )
+
+prompt_svn() {
+    local rev branch
+    if in_svn; then
+        rev=$(svn_get_rev_nr)
+        branch=$(svn_get_branch_name)
+        if [ `svn_dirty_choose_pwd 1 0` -eq 1 ]; then
+            prompt_segment yellow black
+            echo -n "$rev@$branch"
+            echo -n "±"
+        else
+            prompt_segment green black
+            echo -n "$rev@$branch"
+        fi
+    fi
+}
 
 alias install_deb='sudo dpkg -i'
 alias goto_newest_folder='cd $(ls -td -- */ | head -n 1)'
