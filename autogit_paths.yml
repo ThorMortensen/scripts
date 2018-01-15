@@ -7,6 +7,7 @@ AUTO_COMMIT_PATHS:
 - "~/embedded_wireless_systems"
 - "~/02203-Design-af-digitale-systemer-"
 - "~/workspace_head/223_EMBEDDED/firmware/lib/rovsing/apb-ad_generic"
+- "~/afgangsprojekt_code/apb-ad_generic"
 AUTO_ADD_PATHS:
 - "~/scripts"
 - "~/afgangsprojekt_DTU_2017"
