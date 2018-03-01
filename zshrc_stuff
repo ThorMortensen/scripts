@@ -8,6 +8,9 @@
 
 # source ~/.fonts/*.sh
 
+# echo "ADD: powerlevel9k/powerlevel9k TO ZSH_THEME IN .zshrc"
+# echo "ADD: POWERLEVEL9K_MODE='awesome-fontconfig' BEFORE ZSH_THEME IN .zshrc"
+
 # POWERLEVEL9K_MODE='awesome-patched'
 
 
@@ -91,5 +94,6 @@ prompt_svn() {
     fi
 }
 
-alias install_deb='sudo dpkg -i'
+
+alias install_deb='sudo dpkg -i '
 alias goto_newest_folder='cd $(ls -td -- */ | head -n 1)'
