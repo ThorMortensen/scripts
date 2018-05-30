@@ -21,7 +21,7 @@ AUTO_ADD_PATHS = "AUTO_ADD_PATHS"
 
 
 def exitPoint
-  puts "\nEnjoy life. Enjoy QOL scripts . Exerting..".green
+  puts "\nEnjoy life. Enjoy QOL scripts.".green
   exit()
 end
 
