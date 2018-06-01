@@ -1,20 +1,7 @@
 ---
 AUTO_COMMIT_PATHS:
-- "~/scripts"
-- "~/afgangsprojekt_DTU_2017"
-- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/drivers/rovsing/ad_generic"
-- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/include/rovsing"
-- "~/embedded_wireless_systems"
-- "~/02203-Design-af-digitale-systemer-"
-- "~/workspace_head/223_EMBEDDED/firmware/lib/rovsing/apb-ad_generic"
-- "~/afgangsprojekt_code/apb-ad_generic"
 - "~/install_script"
 - "~/Documents/PlatformIO/Projects/door_opener"
-AUTO_ADD_PATHS:
 - "~/scripts"
-- "~/afgangsprojekt_DTU_2017"
-- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/drivers/rovsing/ad_generic"
-- "~/workspace/223_EMBEDDED/os/kernel/linux-2.6.21.1-leon23-1.0.6/include/rovsing"
-- "~/02203-Design-af-digitale-systemer-"
-- "~/workspace_head/223_EMBEDDED/firmware/lib/rovsing/apb-ad_generic"
+AUTO_ADD_PATHS:
 - "~/install_script"
