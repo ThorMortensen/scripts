@@ -3,5 +3,6 @@ AUTO_COMMIT_PATHS:
 - "~/install_script"
 - "~/Documents/PlatformIO/Projects/door_opener"
 - "~/scripts"
+- "~/.config/sublime-text-3/Packages/User"
 AUTO_ADD_PATHS:
 - "~/install_script"
