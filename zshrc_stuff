@@ -76,6 +76,7 @@ plugins=(
   svn
   autojump
   zsh-autosuggestions
+  sublime
 )
 
 prompt_svn() {
@@ -97,3 +98,4 @@ prompt_svn() {
 
 alias install_deb='sudo dpkg -i '
 alias goto_newest_folder='cd $(ls -td -- */ | head -n 1)'
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}'
