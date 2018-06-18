@@ -7,3 +7,4 @@ AUTO_COMMIT_PATHS:
 - "~/modelsim_build"
 AUTO_ADD_PATHS:
 - "~/install_script"
+- "~/scripts"
