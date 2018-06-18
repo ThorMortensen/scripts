@@ -1,10 +1,8 @@
-
-
 #!/bin/bash
 
 . globals
 
-ruby -W0 $SCRIPTS_DIR'/autogit.rb'
+ruby -W0 $SCRIPTS_DIR'/regParser.rb' statusBits $1
 
 
 

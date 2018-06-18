@@ -1,6 +1,6 @@
 # Bit index Description
-registers =
-:statusBitsDef =>
+@registers = {
+:statusBits => [
  "system running (CSC OK)",
  "relay1 feedback (0-closed, 1-open)",
  "relay2 feedback (0-closed, 1-open)",
@@ -25,3 +25,22 @@ registers =
  "Data_buffer_ready",
  "Data_buffer_overrun",
  "CRC_error"
+],
+
+:safetyLink_mask => [
+"OVP1",
+"OVP2",
+"UVP",
+"OCP1",
+"OCP2",
+"OCP negative",
+"Local",
+"External latched trigger or any trigger output is active in the other saftylink",
+"UVP delayed trig of relay",
+]
+
+
+}
+
+
+
