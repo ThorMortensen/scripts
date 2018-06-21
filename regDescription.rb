@@ -37,7 +37,7 @@
 "Local",
 "External latched trigger or any trigger output is active in the other saftylink",
 "UVP delayed trig of relay",
-]
+],
 
 
 }

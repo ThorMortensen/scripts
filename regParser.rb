@@ -27,7 +27,7 @@ while (runForEver)
   puts '+-----+-------+-------------+'
 
   for i in table
-    puts "|  #{' ' if bitdex < 10}#{bitdex} |   #{statusBits&0x1}   | #{i.to_s}" 
+    puts "|  #{' ' if bitdex < 10}#{bitdex} |   #{statusBits&0x1 == 1 ? "1".red : "0".green}   | #{i.to_s}" 
     bitdex += 1
     statusBits >>= 1
   end 
