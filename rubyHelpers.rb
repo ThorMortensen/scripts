@@ -96,3 +96,44 @@ end
     def reverse_color;  "\e[7m#{self}\e[27m" end
   end
 #@formatter:on
+
+
+class UserPrompter
+
+  gem 'tty-cursor'
+  require 'tty-cursor'
+
+  # @param [String] promtStr
+  def initialize(promtStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number')
+    @pormtStr = promtStr
+    @checkValidInput = acceptedInput_lambda
+    @cursor = TTY::Cursor
+    @errorMsg = errorMsg
+    @lastInput = nil
+  end
+
+  def promt(promtStr = @pormtStr)
+    while true
+      print "#{promtStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
+      print @cursor.backward(@lastInput.to_s.length + 1)
+      system("stty raw -echo") #=> Raw mode, no echo
+      userInput = STDIN.getc
+      system("stty -raw echo") #=> Reset terminal mode
+      if userInput != "\r"
+        print @cursor.clear_line_before
+        print userInput
+        userInput += STDIN.gets.chomp
+        if @checkValidInput.(userInput)
+          return @lastInput = userInput
+        else
+          puts @errorMsg
+        end
+      end
+    end
+  end
+
+  def clear
+    @lastInput = nil
+  end
+
+end

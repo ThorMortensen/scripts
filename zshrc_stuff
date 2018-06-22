@@ -98,6 +98,7 @@ prompt_svn() {
 
 alias goto_newest_folder='cd $(ls -td -- */ | head -n 1)'
 alias in='sudo apt install'
+# alias do='./'
 alias cleos='docker exec eosio /opt/eosio/bin/cleos --wallet-url http://localhost:8888'
 
 # alias ipp='192.168'

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 . globals
 cd $SCRIPTS_DIR
 
@@ -10,5 +12,4 @@ MASC_DEV=$(ruby ip_parser.rb masc getActiveDev)
 
 echo "Active IP is $MASC_IP"
 
-
-ruby ~/scripts/raw_masc_cmd_connection.rb $MASC_IP
+ruby -W0 $SCRIPTS_DIR'/rov_cmd.rb' $MASC_IP

@@ -1,0 +1,410 @@
+
+
+
+MASC_commands:
+  
+0 
+
+Get the result of
+the ping to the
+MASC
+ping()
+1
+Run a self test
+on the MASC selfTestNormal()
+3
+Get the results
+of the self test getSelfTestResult()
+5
+Set a self test
+extended setSelfTestExtended()
+6
+Get the results
+of a self test
+extended, that
+can afect the
+lines, and may
+require the
+operator to
+connect special
+test equipment
+to the MASC
+getSelfTestExtended ()
+# 11
+# Reset the hold of
+# a safety link 1
+# signal for the
+# MASC
+# resetSafetyLinkHold()
+# 12
+# Reset the hold of
+# a safety link 2
+# signal for the
+# MASC
+# resetSafetyLink2Hold()
+# 13 Trigger the
+# safety link triggerSafetyLinkLocally ()
+# 14
+# Get the status of
+# the various
+# monitoring lines
+# of the safety link
+# getSafetyLinkDebugStatus()
+# 15
+# Get the current
+# value of the
+# requested health
+# monitor
+# parameter
+# getHealthMonitor(<parameterID>)
+# 16 Not used
+# 17 Get the version
+# of the firmware
+# getVersion(<fwORsw>)
+# Page 10 of 91
+# or software
+# 18
+# Sets the value of
+# the software
+# controllable
+# display
+# setDisplay(<displayNumber>)
+# 19
+# Returns value of
+# MASC's J22
+# connector,
+# inverted
+# getSubSystemJumpers()
+# 21
+# Returns the
+# measurement of
+# the analogue
+# thermistor
+# acquireAnalogueThermistorParameter
+# (<thermistorId>)
+# 22
+# Returns the
+# measurement of
+# an analogue line.
+# acquireAnalogueDEAParameter
+# (<parameterId>)
+# 23
+# Set the trigger
+# high limit
+# voltage level
+# setAnalogueDEAParameterHighTriggerLimit
+# (<parameterId>, <voltage>)
+# 24
+# Set the trigger
+# low limit voltage
+# level
+# setAnalogueDEAParameterLowTriggerLimit
+# (<parameterId>, <voltage>)
+# 25 Returns the high
+# trigger limit
+# getAnalogueDEAParameterHighTriggerLimit
+# (<parameterId>)
+# 26 Returns the low
+# trigger limit
+# getAnalogueDEAParameterLowTriggerLimit
+# (<parameterId>)
+# 27 Enable the high
+# trigger
+# enableAnalogueDEAParameterTriggerHigh
+# (<parameterId>)
+# 28 Enable the low
+# trigger
+# enableAnalogueDEAParameterTriggerLow
+# (<parameterId>)
+# 29
+# Return if the
+# high trigger is
+# enabled or not
+# isAnalogueDEAParameterTriggerHighEnabled
+# (<parameterId>)
+# 30
+# Return if the low
+# trigger is
+# enabled or not
+# isAnalogueDEAParameterTriggerLowEnabled
+# (<parameterId>)
+# 31
+# Set the
+# undervoltage or
+# soft overvoltage
+# protection limit
+# setAnalogueDEAParameterTriggerLowMode
+# (<parameterId>)
+# 32
+# Return if the
+# high trigger is
+# triggered or not
+# IsAnalogueDEAParameterHighTriggered
+# (<parameterId>)
+# 33
+# Return if the low
+# trigger is
+# triggered or not
+# IsAnalogueDEAParameterLowTriggered
+# (<parameterId>)
+# 34
+# Reset all
+# parameters of
+# the triggers
+# resetAllAnalogueDEAParameterTriggers()
+# 35
+# Get the
+# measurement of
+# a generic
+# parameter
+# getADGenericParameter (<devNum>,
+# <parameterNumber>)
+# Page 11 of 91
+# 36
+# Set the value of
+# a generic
+# parameter
+# setADGenericParameter(<parameterNumber>
+# , <value>
+# 40
+# Start/Stop HLC
+# pulse on the
+# designated line
+# setHLCPulse( <hlcLineId>, <onOf> )
+# 41
+# Read HLC input
+# (bi level as well
+# as HLC pulse
+# feedback)
+# getHLCInput( <hlcInputId> )
+# 42 Set HLC pulse
+# length
+# setHLCPulseLength( <hlcLineId>, <length_us>
+# )
+# 43 Get HLC pulse
+# length getHLCPulseLength( <hlcLineId> )
+# 71
+# Set the selection
+# on the
+# thermistor
+# simulation
+# identified by
+# <id> which
+# resistor to use.
+# Resistors are
+# numbered
+# setThermistorSimulationValue( <thermistorId>
+# , <valueId> )
+# 72
+# Get the id of the
+# currently
+# selected resistor
+# on the
+# designated
+# thermistor
+# simulation
+# getThermistorSimulationValue( <resistorId> )
+# 81
+# Set the
+# deployment
+# switch
+# simulation
+# designated by
+# <id> to open or
+# close the relay
+# setSwitchSimulationState( <switchId>,
+# <state> )
+# 82
+# Get the current
+# state of the
+# designated
+# deployment
+# switch
+# simulation
+# getSwitchSimulationState( <switchId> )
+# 83
+# Get the current
+# state of the
+# switch
+# getBiLevelState(<lineId>)
+# 84
+# Set the state for
+# a given external
+# relay Id. True for
+# closed switch,
+# false for open
+# setExternalSwitchState(<externalRelayId>,
+# <state>)
+# 85 Get the current
+# status on the
+# getExternalSwitchState(<externalRelayId>)
+# Page 12 of 91
+# designated
+# external relay id
+# 91
+# Get the current
+# status (normal /
+# spurious) on the
+# designated line
+# getPyroLineSpuriousState(<pyroLineId>)
+# 92
+# Reset the status
+# the designated
+# line to normal
+# resetPyroSpuriousState( <pyroLineId> )
+# 93
+# Set the selection
+# of a line and its
+# redundant to
+# measure valid
+# pyro signals
+# setVerificationPyroLine( <pyroLineId> )
+# 94
+# Get the line id of
+# the line selected
+# for valid pyro
+# signals
+# measurement
+# getVerificationPyroLine( <pyroLineId> )
+# 95
+# Get the length in
+# microsecond of
+# the last pyro
+# pulse detected
+# getPyroPulseLength ( <pyroLineId> )
+# 96
+# Get the height in
+# V of the last pyro
+# pulse detected
+# getPyroPulseHeight ( <pyroLineId> )
+# 97
+# Start sample on
+# the pyro line id
+# selected
+# pyroStartSample ( <pyroLineId>)
+# 98
+# Stop sample on
+# the pyro line id
+# selected
+# pyroAbortSample ( <pyroLineId> )
+# 99
+# Get the status of
+# the pyro line id
+# sample
+# getPyroSampleStatus (<pyroLineId>)
+# 100
+# Set the spurious
+# threshold for the
+# selected pyro
+# line id
+# setPyroSpuriousThreshold (<pyroLineId >,
+# <milivoltage>)
+# 101
+# Get the spurious
+# threshold of the
+# selected pyro
+# line id
+# getPyroSpuriousThreshold(<pyroLineId >)
+# 102 Set threshold of
+# the pyro sample
+# setPyroSampleThreshold (<pyroLineId >,
+# <milivoltage>)
+# 103
+# Get the
+# threshold of the
+# pyro sample
+# getPyroSampleThreshold (<pyroLineId >)
+# 104 Get the pyro
+# value getPyroValue(<pyroLineId >)
+# 105 Get the pyro
+# thermistor value getPyroThermistorValue(<thermId>
+# 110 Set the state for setLowLevelState(<lineId>,<state>)
+# Page 13 of 91
+# the switches on
+# the low level
+# driver board
+# 111
+# Get the state for
+# the switches on
+# the low level
+# driver board
+# getLowLevelState(<switchId>)
+# 112 setSLP2DisableProtection
+# 113 getSafetyLink2DebugStatus
+# 114 Set the mask for
+# safety link 1 setSafetyLink1Mask
+# 115 Set the mask for
+# safety link 1 setSafetyLink2Mask
+# 116
+# Get the mask
+# setting for safety
+# link 1
+# getSafetyLink1Mask
+# 117
+# Get the mask
+# setting for safety
+# link 1
+# getSafetyLink2Mask
+# 118
+# Returns the raw
+# measurement of
+# the thermistor
+# acquireAnalogueThermistorParameterHex(<te
+# rmistorId>)
+# 119 Reset all 64
+# relays on LLD resetLowLevelState
+# 120 setLowLevelSingleState
+# 121 Main function for
+# SLP calibration
+# setSLPCalibrationMeasurement(<calibration
+# type>)
+# 122
+# Set the date
+# when calibration
+# is done
+# setSLPCalibrationDate(<date>)
+# 123
+# Get the date
+# when calibration
+# was done
+# getSLPCalibrationDate(<date>)
+# 124
+# Set all conditions
+# prior to
+# calibration
+# setSLPCalibrationEnable
+# 125 setSLPCalibrationPassword
+# 150 Set PWM duty
+# cycle setLLDPWM
+# 151 Get PWM duty
+# cycle getLLDPWM
+# 152
+# Set multiple LLD
+# output
+# simultaneously
+# setLLDMask
+# 153 Get complete
+# LLD register getLLDMask
+# 154 Set single pulse
+# time setSinglePulseTime
+# 155 Get single pulse
+# time getSinglePulseTime
+# 156 Initiate single
+# pulse output setSinglePulse
+# 160 Set shared setShm
+# Page 14 of 91
+# memory
+# 161 Get shared
+# memory
+# getShm
+# 162 Set common
+# shared memory setCommonShm
+# 163 Get common
+# shared memory getCommonShm
+# 170
+# Set current or
+# voltage tip
+# threshold
+# setPyroADThres
+# 171 Get ADC or shift
+# reg value getPyroVal
