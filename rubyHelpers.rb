@@ -5,6 +5,9 @@
 
 module RubyHelpers
 
+
+
+
 end
 class Array
 
@@ -97,43 +100,61 @@ end
   end
 #@formatter:on
 
+#
+# class UserPrompter
+#   def installing_missing_gems(&block)
+#     yield
+#   rescue LoadError => e
+#     gem_name = e.message.split('--').last.strip
+#     install_command = 'gem install ' + gem_name
+#
+#     # install missing gem
+#     puts 'Probably missing gem: ' + gem_name
+#     print 'Auto-install it? [yN] '
+#     gets.strip =~ /y/i or exit(1)
+#     system(install_command) or exit(1)
+#
+#     # retry
+#     Gem.clear_paths
+#     puts 'Trying again ...'
+#     require gem_name
+#     retry
+#   end
+#
+#   installing_missing_gems do
+#     require 'tty-cursor'
+#   end
+#
+#   # @param [String] promtStr
+#   def initialize(promtStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number')
+#     @pormtStr = promtStr
+#     @checkValidInput = acceptedInput_lambda
+#     @cursor = TTY::Cursor
+#     @errorMsg = errorMsg
+#     @lastInput = nil
+#   end
+#
+#   def promt(promtStr = @pormtStr)
+#     while true
+#       print "#{promtStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
+#       print @cursor.backward(@lastInput.to_s.length + 1)
+#       system("stty raw -echo") #=> Raw mode, no echo
+#       userInput = STDIN.getc
+#       system("stty -raw echo") #=> Reset terminal mode
+#       if userInput != "\r"
+#         print @cursor.clear_line_before
+#         print userInput
+#         userInput += STDIN.gets.chomp
+#         if @checkValidInput.(userInput)
+#           return @lastInput = userInput
+#         else
+#           puts @errorMsg
+#         end
+#       end
+#     end
+#   end
+#   def clear
+#     @lastInput = nil
+#   end
 
-class UserPrompter
-
-  gem 'tty-cursor'
-  require 'tty-cursor'
-
-  # @param [String] promtStr
-  def initialize(promtStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number')
-    @pormtStr = promtStr
-    @checkValidInput = acceptedInput_lambda
-    @cursor = TTY::Cursor
-    @errorMsg = errorMsg
-    @lastInput = nil
-  end
-
-  def promt(promtStr = @pormtStr)
-    while true
-      print "#{promtStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
-      print @cursor.backward(@lastInput.to_s.length + 1)
-      system("stty raw -echo") #=> Raw mode, no echo
-      userInput = STDIN.getc
-      system("stty -raw echo") #=> Reset terminal mode
-      if userInput != "\r"
-        print @cursor.clear_line_before
-        print userInput
-        userInput += STDIN.gets.chomp
-        if @checkValidInput.(userInput)
-          return @lastInput = userInput
-        else
-          puts @errorMsg
-        end
-      end
-    endsyn
-  end
-end
-  def clear
-    @lastInput = nil
-  end
-
-end
+# end
