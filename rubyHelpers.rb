@@ -129,9 +129,9 @@ class UserPrompter
           puts @errorMsg
         end
       end
-    end
+    endsyn
   end
-
+end
   def clear
     @lastInput = nil
   end

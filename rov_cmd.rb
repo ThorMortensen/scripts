@@ -47,17 +47,25 @@ class UserPrompter
   @@IntegerBetween
 
   # @param [String] promptStr
-  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)},errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
+  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)},errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i}, nurseInput = false)
     @pormtStr = promptStr
     @checkValidInput = acceptedInput_lambda
     @cursor = TTY::Cursor
     @errorMsg = errorMsg
     @lastInput = nil
     @inputConverter_lambda = inputConverter_lambda
+    @nurse = nurseInput
+  end
+
+  def nurseInput
+    if @nurse
+      @lastInput += 1 unless @lastInput.nil?
+    end
   end
 
   def prompt(promptStr = @pormtStr)
     while true
+      nurseInput()
       print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
       print @cursor.backward(@lastInput.to_s.length + 1)
       system("stty raw -echo") #=> Raw mode, no echo
@@ -107,7 +115,7 @@ class RawCmdConnection
   end
 
   def sendCmd(cmdId, arg1, arg2)
-    # connect unless @isConnected
+    connect unless @isConnected
     new_packet
     set_command_id cmdId
     set_packet_id 2
@@ -155,8 +163,8 @@ class RawCmdConnection
 
     betweenLambda = -> input {input.is_integer? && input.to_i.between?(0, 255)}
     betweenErrorMsg = "Must be between 0 and 255".red
-    cmdPrompt = UserPrompter.new("\nEnter CMD (number)".green + " ~> ", betweenLambda, betweenErrorMsg)
-    arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta + " ~> ")
+    cmdPrompt = UserPrompter.new("Enter CMD (number)".green + " ~> ", betweenLambda, betweenErrorMsg)
+    arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta + " ~> ", -> input {input.match(/\d/)}, 'Must be a number', -> input {input.to_i}, true)
     arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan + " ~> ")
     shmChmCmdPrompt = UserPrompter.new("Shm CMD ".bold + " ~> ", betweenLambda, betweenErrorMsg)
     shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold + " ~> ", betweenLambda, betweenErrorMsg)
@@ -240,3 +248,15 @@ end
 ARGV.clear
 commandAndConquer = RawCmdConnection.new(@mascIp)
 commandAndConquer.start
+
+
+#
+# Things to add
+# - Main meny
+# - Help section
+# - Back
+# - history
+# - accept math function
+# - Fix delete
+#  -clone if given as arg in constructer
+#

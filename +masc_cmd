@@ -5,7 +5,9 @@ cd $SCRIPTS_DIR
 
 . bash_helper_functions.sh
 
-checkAndSetIP_arg_masc $1
+# checkAndSetIP_arg_masc $1
+checkAndSetIP_arg_masc $1 "masc"
+
 
 MASC_IP=$(ruby ip_parser.rb masc getActiveIP)
 MASC_DEV=$(ruby ip_parser.rb masc getActiveDev)
