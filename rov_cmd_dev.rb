@@ -264,7 +264,6 @@ end
 # end
 
 
-
 ##############################################
 #		              MAIN
 ##############################################
@@ -272,8 +271,6 @@ end
 # ARGV.clear
 # commandAndConquer = RawCmdConnection.new(@mascIp)
 # commandAndConquer.start
-
-
 
 
 #
@@ -290,19 +287,38 @@ end
 
 class UserPrompter
 
+  attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda
+
+
   @@callStack = []
   @@controlKeys = {"b" => :back, "h" => :help}
+  @lastInput = nil
+  @cursor = TTY::Cursor
 
   # @param [String] promptStr
-  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i}, nurseInput = false)
-    @pormtStr = promptStr
-    @checkValidInput = acceptedInput_lambda
-    @cursor = TTY::Cursor
-    @errorMsg = errorMsg
-    @lastInput = nil
-    @inputConverter_lambda = inputConverter_lambda
-    @nurse = nurseInput
+  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
+    @promptStr = promptStr
+    if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
+      @checkValidInput = acceptedInput_lambda.checkValidInput
+      @errorMsg = acceptedInput_lambda.errorMsg
+      @inputConverter_lambda = acceptedInput_lambda.inputConverter_lambda
+    else
+      @checkValidInput = acceptedInput_lambda
+      if errorMsg.is_a?(UserPrompter)
+        @errorMsg = errorMsg.errorMsg
+        @inputConverter_lambda = errorMsg.inputConverter_lambda
+      else
+        @errorMsg = errorMsg
+        if inputConverter_lambda.is_a?(UserPrompter)
+          @inputConverter_lambda = inputConverter_lambda.inputConverter_lambda
+        else
+          @inputConverter_lambda = inputConverter_lambda
+        end
+      end
+    end
   end
+
+
 
   def nurseInput
     if @nurse
@@ -310,16 +326,14 @@ class UserPrompter
     end
   end
 
-  def prompt(promptStr = @pormtStr)
+
+  def prompt(promptStr = @promptStr, conditionalLambda)
     while true
-      nurseInput()
       print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
       print @cursor.backward(@lastInput.to_s.length + 1)
       system("stty raw -echo") #=> Raw mode, no echo
-
-
       userInput = STDIN.getc
-
+      system("stty -raw echo") #=> Reset terminal mode
       if userInput == "q"
         puts
         return nil
@@ -336,12 +350,42 @@ class UserPrompter
         puts @lastInput
         return @lastInput
       end
-
-
-      system("stty -raw echo") #=> Reset terminal mode
-
     end
   end
+
+
+  # def prompt(promptStr = @pormtStr)
+  #   while true
+  #     nurseInput()
+  #     print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
+  #     print @cursor.backward(@lastInput.to_s.length + 1)
+  #     system("stty raw -echo") #=> Raw mode, no echo
+
+
+  #     userInput = STDIN.getc
+
+  #     if userInput == "q"
+  #       puts
+  #       return nil
+  #     elsif userInput != "\r"
+  #       print @cursor.clear_line_before
+  #       print userInput
+  #       userInput += STDIN.gets.chomp
+  #       if @checkValidInput.(userInput)
+  #         return @lastInput = @inputConverter_lambda.(userInput)
+  #       else
+  #         puts @errorMsg
+  #       end
+  #     else
+  #       puts @lastInput
+  #       return @lastInput
+  #     end
+
+
+  #     system("stty -raw echo") #=> Reset terminal mode
+
+  #   end
+  # end
 
   def pushToCallStack
     @@callStack << self
@@ -355,11 +399,53 @@ class UserPrompter
     @lastInput = nil
   end
 
-  private
+  def result
+    @lastInput
+  end
+
+  # private
 
   def navigate
 
   end
 
+  def pp()
+    puts @promptStr
+    input = STDIN.gets.chomp
+    if input == "b"
+      @@callStack.pop().pp
+    else
+      puts "Setting input to : #{input}"
+      @lastInput = input
+      @@callStack << self
+    end
+  end
+
 
 end
+
+puts "starting.."
+puts
+puts
+
+
+a = UserPrompter.new("This is a test for a~>")
+b = UserPrompter.new("This is a test for b~>", a)
+c = UserPrompter.new("This is a test for c~>", b)
+d = UserPrompter.new("This is a test for d~>", c)
+e = UserPrompter.new("This is a test for e~>", d)
+
+
+a.pp()
+b.pp()
+c.pp()
+d.pp()
+e.pp()
+
+
+puts "result for a is #{a.result}"
+puts "result for b is #{b.result}"
+puts "result for c is #{c.result}"
+puts "result for d is #{d.result}"
+puts "result for e is #{e.result}"
+

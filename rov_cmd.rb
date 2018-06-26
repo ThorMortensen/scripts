@@ -48,7 +48,7 @@ class UserPrompter
 
   # @param [String] promptStr
   def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)},errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i}, nurseInput = false)
-    @pormtStr = promptStr
+    @promptStr = promptStr
     @checkValidInput = acceptedInput_lambda
     @cursor = TTY::Cursor
     @errorMsg = errorMsg
@@ -63,7 +63,7 @@ class UserPrompter
     end
   end
 
-  def prompt(promptStr = @pormtStr)
+  def prompt(promptStr = @promptStr)
     while true
       nurseInput()
       print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
