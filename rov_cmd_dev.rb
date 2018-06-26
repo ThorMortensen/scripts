@@ -5,6 +5,7 @@ gem 'tty-cursor'
 require 'socket'
 require 'tty-cursor'
 
+
 #@formatter:off
 class String
   def white;          "\e[30m#{self}\e[0m" end
@@ -290,7 +291,8 @@ class UserPrompter
   attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda
 
 
-  @@callStack = []
+  @@backStack = [[], []]
+  @@backStackIndexer = 0
   @@controlKeys = {"b" => :back, "h" => :help}
   @lastInput = nil
   @cursor = TTY::Cursor
@@ -317,7 +319,6 @@ class UserPrompter
       end
     end
   end
-
 
 
   def nurseInput
@@ -387,11 +388,31 @@ class UserPrompter
   #   end
   # end
 
-  def pushToCallStack
-    @@callStack << self
+  def addToBackStack
+    puts "adding to back stack #{promptStr} #{@@backStackIndexer}"
+    @@backStack[@@backStackIndexer] << self
   end
 
-  def clearCallStack
+  def goBack
+    if @@backStack[@@backStackIndexer].empty?
+      if @@backStackIndexer > 0
+        @@backStackIndexer -= 1
+        puts "popping back stack (was empty)
+ #{promptStr} #{@@backStackIndexer}"
+
+        @@backStack[@@backStackIndexer].pop().pp
+      else
+        puts "falied go back"
+        return false
+      end
+    end
+    puts "popping back stack  #{promptStr} #{@@backStackIndexer}"
+
+    @@backStack[@@backStackIndexer].pop().pp
+    return true
+  end
+
+  def self.clearBackStack
 
   end
 
@@ -409,36 +430,64 @@ class UserPrompter
 
   end
 
-  def pp()
-    puts @promptStr
-    input = STDIN.gets.chomp
-    if input == "b"
-      @@callStack.pop().pp
-    else
-      puts "Setting input to : #{input}"
-      @lastInput = input
-      @@callStack << self
+
+  def pp(conditionalBlock = nil)
+    @conditionalBlock ||= conditionalBlock
+    begin
+      puts @promptStr
+      input = STDIN.gets.chomp
+      if input == "b"
+        raise
+      else
+        puts "Setting input to : #{input}"
+        @lastInput = input
+        addToBackStack
+        unless @conditionalBlock.nil?
+          puts "Calling block input : #{input} last input #{@lastInput}"
+          # puts @@backStack.to_s
+          @@backStackIndexer += 1
+          @conditionalBlock.call(@lastInput)
+          @@backStackIndexer -= 1
+          # puts @@backStack.to_s
+        end
+      end
+    rescue
+      retry if goBack
     end
   end
 
 
 end
 
+require 'tty-prompt'
+
+# prompt = TTY::Prompt.new
+
 puts "starting.."
 puts
 puts
 
 
-a = UserPrompter.new("This is a test for a~>")
-b = UserPrompter.new("This is a test for b~>", a)
-c = UserPrompter.new("This is a test for c~>", b)
-d = UserPrompter.new("This is a test for d~>", c)
-e = UserPrompter.new("This is a test for e~>", d)
+a = UserPrompter.new(" a ~>".bg_cyan)
+b = UserPrompter.new(" b ~>".bg_cyan, a)
+c = UserPrompter.new(" c ~>".bg_cyan, b)
+d = UserPrompter.new(" d ~>".bg_cyan, c)
+e = UserPrompter.new(" e ~>".bg_cyan, d)
+
+
+ca = UserPrompter.new("ca ~>".bg_cyan, c)
+cb = UserPrompter.new("cb ~>".bg_cyan, d)
 
 
 a.pp()
 b.pp()
-c.pp()
+c.pp -> res {
+
+  if res == "foo"
+    ca.pp
+    cb.pp
+  end
+}
 d.pp()
 e.pp()
 
