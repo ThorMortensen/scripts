@@ -455,10 +455,13 @@ class UserPrompter
 
   def >>(other)
     if other.is_a?(Hash)
+      foo = other.first.last
+      puts foo.to_s
       @nextPrompt.prepend other
       other.first.last
     else
       @nextPrompt << ({-> res {true} => other})
+      # self
       other
     end
   end
@@ -508,8 +511,8 @@ ca = UserPrompter.new("ca ~>".bg_cyan, c)
 cb = UserPrompter.new("cb ~>".bg_cyan, d)
 
 a >> b >> c >> d >> e
-ca >> cb >> d
-c >> {-> res {res == "foo"} => ca}
+# ca >> cb >> d
+c >> {-> res {res == "foo"} => ca >> cb >> d}
 
 
 # f = { lambda {|res| res != "foo"} => "ca"}
