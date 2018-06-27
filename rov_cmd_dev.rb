@@ -288,7 +288,7 @@ end
 
 class UserPrompter
 
-  attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda
+  attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda, :nextPrompt, :prevPrompt
 
 
   @@backStack        = [[], []]
@@ -433,42 +433,52 @@ class UserPrompter
   end
 
 
-  def pp(conditionalBlock = nil)
-    @conditionalBlock ||= conditionalBlock
-    begin
-      puts @promptStr
-      input               = STDIN.gets.chomp
-      @thisBackStackGroup = @@backStackIndexer
-      if input == "b"
-        raise
-      else
-        puts "Setting input to : #{input}"
-        @lastInput = input
-        addToBackStack
-        unless @conditionalBlock.nil?
-          puts "Calling block input : #{input} last input #{@lastInput}"
-          # puts @@backStack.to_s
-          @@backStackIndexer += 1
-          @conditionalBlock.call(@lastInput)
-          @@backStackIndexer -= 1
-          return
-          # puts @@backStack.to_s
-        end
-      end
-    rescue
-      retry if goBack
+  def pp
+    puts @promptStr
+    input = STDIN.gets.chomp
+    if input == "b"
+      :back
+    else
+      @lastInput = input
+      true
     end
   end
 
+  def <<(other)
+    @prevPrompt = other
+    self
+  end
 
-  
+  def >>(other)
+    unless other.is_a?(Hash)
+      @nextPrompt = {true => other}
+    end
+    @nextPrompt = other
+    other<<(self)
+  end
 
+  def self.runPrompt(promptToRun)
+
+    until promptToRun.nil?
+      case promptToRun.pp
+        when true
+          promptToRun.nextPrompt.each do |condition, branchTo|
+            promptToRun = branchTo if condition.call(promptToRun.result)
+          end
+          
+
+        when :back
+          promptToRun = promptToRun.prevPrompt
+      end
+    end
+  end
 
 end
 
 # require 'tty-prompt'
-
+#
 # prompt = TTY::Prompt.new
+
 
 puts "starting.."
 puts
@@ -481,22 +491,36 @@ c = UserPrompter.new(" c ~>".bg_cyan, b)
 d = UserPrompter.new(" d ~>".bg_cyan, c)
 e = UserPrompter.new(" e ~>".bg_cyan, d)
 
-
 ca = UserPrompter.new("ca ~>".bg_cyan, c)
 cb = UserPrompter.new("cb ~>".bg_cyan, d)
 
+a>>b>>c>>d>>e
+ca>>cb
 
-a.pp()
-b.pp()
-c.pp -> res {
 
-  if res == "foo"
-    ca.pp
-    cb.pp
-  end
-}
-d.pp()
-e.pp()
+f = { lambda {|res| res != "foo"} => "ca"}
+# f = lambda {|res| res == "foo"}
+
+puts f.first.first.call("foo")
+# puts f.to_s
+
+# bar = f
+
+# bar.call("foo")
+
+# UserPrompter.runPrompt(a)
+
+# a.pp()
+# b.pp()
+# # c.pp -> res {
+# #
+# #   if res == "foo"
+# #     ca.pp
+# #     cb.pp
+# #   end
+# # }
+# d.pp()
+# e.pp()
 
 
 puts "result for a is #{a.result}"
