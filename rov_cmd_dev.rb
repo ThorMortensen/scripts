@@ -291,23 +291,23 @@ class UserPrompter
   attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda
 
 
-  @@backStack = [[], []]
+  @@backStack        = [[], []]
   @@backStackIndexer = 0
-  @@controlKeys = {"b" => :back, "h" => :help}
-  @lastInput = nil
-  @cursor = TTY::Cursor
+  @@controlKeys      = {"b" => :back, "h" => :help}
+  @lastInput         = nil
+  @cursor            = TTY::Cursor
 
   # @param [String] promptStr
   def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
     @promptStr = promptStr
     if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
-      @checkValidInput = acceptedInput_lambda.checkValidInput
-      @errorMsg = acceptedInput_lambda.errorMsg
+      @checkValidInput       = acceptedInput_lambda.checkValidInput
+      @errorMsg              = acceptedInput_lambda.errorMsg
       @inputConverter_lambda = acceptedInput_lambda.inputConverter_lambda
     else
       @checkValidInput = acceptedInput_lambda
       if errorMsg.is_a?(UserPrompter)
-        @errorMsg = errorMsg.errorMsg
+        @errorMsg              = errorMsg.errorMsg
         @inputConverter_lambda = errorMsg.inputConverter_lambda
       else
         @errorMsg = errorMsg
@@ -397,19 +397,21 @@ class UserPrompter
     if @@backStack[@@backStackIndexer].empty?
       if @@backStackIndexer > 0
         @@backStackIndexer -= 1
-        puts "popping back stack (was empty)
- #{promptStr} #{@@backStackIndexer}"
-
+        puts "popping back stack (was empty) #{promptStr} #{@@backStackIndexer}"
         @@backStack[@@backStackIndexer].pop().pp
+        return false
       else
         puts "falied go back"
         return false
       end
     end
     puts "popping back stack  #{promptStr} #{@@backStackIndexer}"
-
-    @@backStack[@@backStackIndexer].pop().pp
-    return true
+    if @thisBackStackGroup == @@backStackIndexer
+      @@backStack[@@backStackIndexer].pop().pp
+      return true
+    else
+      return false
+    end
   end
 
   def self.clearBackStack
@@ -435,7 +437,8 @@ class UserPrompter
     @conditionalBlock ||= conditionalBlock
     begin
       puts @promptStr
-      input = STDIN.gets.chomp
+      input               = STDIN.gets.chomp
+      @thisBackStackGroup = @@backStackIndexer
       if input == "b"
         raise
       else
@@ -448,6 +451,7 @@ class UserPrompter
           @@backStackIndexer += 1
           @conditionalBlock.call(@lastInput)
           @@backStackIndexer -= 1
+          return
           # puts @@backStack.to_s
         end
       end
@@ -457,9 +461,12 @@ class UserPrompter
   end
 
 
+  
+
+
 end
 
-require 'tty-prompt'
+# require 'tty-prompt'
 
 # prompt = TTY::Prompt.new
 
