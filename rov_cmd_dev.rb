@@ -297,8 +297,11 @@ class UserPrompter
   @lastInput         = nil
   @cursor            = TTY::Cursor
 
+
   # @param [String] promptStr
   def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
+    @nextPrompt = []
+
     @promptStr = promptStr
     if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
       @checkValidInput       = acceptedInput_lambda.checkValidInput
@@ -449,12 +452,15 @@ class UserPrompter
     self
   end
 
+
   def >>(other)
-    unless other.is_a?(Hash)
-      @nextPrompt = {true => other}
+    if other.is_a?(Hash)
+      @nextPrompt.prepend other
+      other.first.last
+    else
+      @nextPrompt << ({-> res {true} => other})
+      other
     end
-    @nextPrompt = other
-    other<<(self)
   end
 
   def self.runPrompt(promptToRun)
@@ -462,14 +468,21 @@ class UserPrompter
     until promptToRun.nil?
       case promptToRun.pp
         when true
-          promptToRun.nextPrompt.each do |condition, branchTo|
-            promptToRun = branchTo if condition.call(promptToRun.result)
+          if promptToRun.nextPrompt.empty?
+           return
           end
-          
-
+          promptToRun.nextPrompt.each do |branchTree|
+            condition, branchTo = branchTree.first
+            if condition.call(promptToRun.result)
+              branchTo << promptToRun
+              promptToRun = branchTo
+              break
+            end
+          end
         when :back
           promptToRun = promptToRun.prevPrompt
       end
+
     end
   end
 
@@ -494,21 +507,22 @@ e = UserPrompter.new(" e ~>".bg_cyan, d)
 ca = UserPrompter.new("ca ~>".bg_cyan, c)
 cb = UserPrompter.new("cb ~>".bg_cyan, d)
 
-a>>b>>c>>d>>e
-ca>>cb
+a >> b >> c >> d >> e
+ca >> cb >> d
+c >> {-> res {res == "foo"} => ca}
 
 
-f = { lambda {|res| res != "foo"} => "ca"}
+# f = { lambda {|res| res != "foo"} => "ca"}
 # f = lambda {|res| res == "foo"}
 
-puts f.first.first.call("foo")
+# puts f.first.first.call("foo")
 # puts f.to_s
 
 # bar = f
 
 # bar.call("foo")
 
-# UserPrompter.runPrompt(a)
+UserPrompter.runPrompt(a)
 
 # a.pp()
 # b.pp()
