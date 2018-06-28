@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,9 +18,9 @@
     </option>
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/scripts@testScript.coverage" NAME="testScript Coverage Results" MODIFIED="1511350865262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1530138683199" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@rov_cmd.rcov" NAME="rov_cmd Coverage Results" MODIFIED="1530087849311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
+    <SUITE FILE_PATH="coverage/scripts@testScript.coverage" NAME="testScript Coverage Results" MODIFIED="1511350865262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="112635537">
@@ -52,12 +53,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Ruby Console" value="2" />
-          <entry key="rb" value="93" />
+          <entry key="rb" value="153" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ruby" value="95" />
+          <entry key="Ruby" value="155" />
         </counts>
       </usages-collector>
     </session>
@@ -76,8 +77,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="463" column="12" lean-forward="true" selection-start-line="463" selection-start-column="12" selection-end-line="463" selection-end-column="12" />
+            <state relative-caret-position="211">
+              <caret line="438" selection-start-line="438" selection-end-line="438" />
             </state>
           </provider>
         </entry>
@@ -201,7 +202,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="62" />
     <option name="y" value="479" />
     <option name="width" value="1850" />
@@ -361,11 +362,13 @@
       <workItem from="1530087297212" duration="6465000" />
       <workItem from="1530122543749" duration="12580000" />
       <workItem from="1530138175301" duration="865000" />
+      <workItem from="1530171253431" duration="2000" />
+      <workItem from="1530171269877" duration="1037000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138640000" />
+    <option name="totallyTimeSpent" value="139679000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -377,10 +380,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="25" width="1865" height="1055" extended-state="6" />
+    <frame x="0" y="158" width="1920" height="1082" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17482133" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.178762" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -413,7 +416,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/rov_cmd_dev.rb</url>
-          <line>527</line>
+          <line>530</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
@@ -604,8 +607,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="463" column="12" lean-forward="true" selection-start-line="463" selection-start-column="12" selection-end-line="463" selection-end-column="12" />
+        <state relative-caret-position="211">
+          <caret line="438" selection-start-line="438" selection-end-line="438" />
         </state>
       </provider>
     </entry>

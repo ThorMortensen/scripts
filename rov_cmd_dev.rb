@@ -435,6 +435,9 @@ class UserPrompter
 
   end
 
+  def firstLink(fromLink = self)
+    @prevPrompt.nil? ? self : firstLink
+  end
 
   def pp
     puts @promptStr
