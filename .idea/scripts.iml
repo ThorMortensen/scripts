@@ -12,5 +12,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="workspace_257" />
     <orderEntry type="library" scope="PROVIDED" name="tty-cursor (v0.5.0, ruby-2.5.1-p57) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tty-reader (v0.3.0, ruby-2.5.1-p57) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tty-screen (v0.6.4, ruby-2.5.1-p57) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="wisper (v2.0.0, ruby-2.5.1-p57) [gem]" level="application" />
   </component>
 </module>

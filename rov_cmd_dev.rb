@@ -4,6 +4,7 @@
 gem 'tty-cursor'
 require 'socket'
 require 'tty-cursor'
+require 'tty-reader'
 
 
 #@formatter:off
@@ -292,12 +293,14 @@ class UserPrompter
 
 
   @controlKeys = {'b' => :back, 'h' => :help, 'q' => :quit}
-  @cursor      = TTY::Cursor
+
 
 
   # @param [String] promptStr
   def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
     @nextPrompt = []
+    @cursor      = TTY::Cursor
+    @reader      = TTY::Reader.new
 
     @promptStr = promptStr
     if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
@@ -322,26 +325,25 @@ class UserPrompter
 
   def pp(promptStr = @promptStr)
     while true
-      print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
+      # print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
+      userInput = @reader.read_line("#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} ")
       print @cursor.backward(@lastInput.to_s.length + 1)
-      system("stty raw -echo") #=> Raw mode, no echo
-      userInput = STDIN.getc
-      system("stty -raw echo") #=> Reset terminal mode
-      if userInput == "q"
-        puts
-        return nil
-      elsif userInput != "\r"
-        print @cursor.clear_line_before
-        print userInput
-        userInput += STDIN.gets.chomp
+
+      # system("stty raw -echo") #=> Raw mode, no echo
+      # userInput = STDIN.getc
+      # system("stty -raw echo") #=> Reset terminal mode
+      if userInput == "b"
+        # puts
+        return :back
+      else #if userInput != "\r"
+        # print @cursor.clear_line_before
+        # print userInput
+        # userInput += STDIN.gets.chomp
         if @checkValidInput.(userInput)
-          return @lastInput = @inputConverter_lambda.(userInput)
+          @lastInput = @inputConverter_lambda.(userInput)
         else
           puts @errorMsg
         end
-      else
-        puts @lastInput
-        return @lastInput
       end
     end
   end
@@ -404,25 +406,24 @@ puts
 puts
 
 
-# a  = UserPrompter.new(" a ~> ".bg_cyan)
-# b  = UserPrompter.new(" b ~> ".bg_cyan, a)
-# c  = UserPrompter.new(" c ~> ".bg_cyan, b)
-# d  = UserPrompter.new(" d ~> ".bg_cyan, c)
-# e  = UserPrompter.new(" e ~> ".bg_cyan, d)
-# ca = UserPrompter.new("ca ~> ".bg_cyan, c)
-# cb = UserPrompter.new("cb ~> ".bg_cyan, d)
-#
-# a >> b >> c >> d >> e
-#
-# c >> {-> res {res == "foo"} => ca >> cb >> d}
-#
-# a.runPrompt
-#
-# puts "result for a is #{a.result}"
-# puts "result for b is #{b.result}"
-# puts "result for c is #{c.result}"
-# puts "result for d is #{d.result}"
-# puts "result for e is #{e.result}"
+a  = UserPrompter.new(" a ~> ".bg_cyan)
+b  = UserPrompter.new(" b ~> ".bg_cyan, a)
+c  = UserPrompter.new(" c ~> ".bg_cyan, b)
+d  = UserPrompter.new(" d ~> ".bg_cyan, c)
+e  = UserPrompter.new(" e ~> ".bg_cyan, d)
+ca = UserPrompter.new("ca ~> ".bg_cyan, c)
+cb = UserPrompter.new("cb ~> ".bg_cyan, d)
 
-reader = TTY::Reader.new
-reader.read_line
+a >> b >> c >> d >> e
+
+c >> {-> res {res == "foo"} => ca >> cb >> d}
+
+a.runPrompt
+
+puts "result for a is #{a.result}"
+puts "result for b is #{b.result}"
+puts "result for c is #{c.result}"
+puts "result for d is #{d.result}"
+puts "result for e is #{e.result}"
+
+
