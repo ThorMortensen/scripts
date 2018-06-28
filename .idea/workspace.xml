@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="" />
+    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,20 +18,20 @@
     </option>
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1530138683199" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
-    <SUITE FILE_PATH="coverage/scripts@rov_cmd.rcov" NAME="rov_cmd Coverage Results" MODIFIED="1530087849311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@testScript.coverage" NAME="testScript Coverage Results" MODIFIED="1511350865262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
+    <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1530216211933" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
+    <SUITE FILE_PATH="coverage/scripts@rov_cmd.rcov" NAME="rov_cmd Coverage Results" MODIFIED="1530087849311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="112635537">
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="rb" value="1398" />
+          <entry key="rb" value="1830" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ruby" value="1398" />
+          <entry key="Ruby" value="1830" />
         </counts>
       </usages-collector>
     </session>
@@ -62,65 +65,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rov_cmd.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="483" column="36" lean-forward="true" selection-start-line="483" selection-start-column="36" selection-end-line="483" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file:///usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="986">
-              <caret line="58" selection-start-line="58" selection-end-line="58" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/+masc_telnet">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/+autogit">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/+masc_flashkernel">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rubyHelpers.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2703">
-              <caret line="159" column="5" selection-start-line="159" selection-start-column="5" selection-end-line="159" selection-end-column="5" />
+            <state relative-caret-position="850">
+              <caret line="371" selection-start-line="371" selection-end-line="371" />
             </state>
           </provider>
         </entry>
@@ -210,6 +159,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -221,7 +171,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -362,11 +311,12 @@
       <workItem from="1530171253431" duration="2000" />
       <workItem from="1530171269877" duration="1037000" />
       <workItem from="1530185687458" duration="691000" />
+      <workItem from="1530210026054" duration="5126000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="140370000" />
+    <option name="totallyTimeSpent" value="145496000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -378,16 +328,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="158" width="1920" height="1082" extended-state="6" />
+    <frame x="55" y="25" width="1865" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18089648" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18306762" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.491689" weight="0.36825398" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.491689" weight="0.36796537" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919572" weight="0.29545453" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.31060606" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.12987013" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.29979676" />
@@ -414,8 +364,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="ruby-line">
           <url>file://$PROJECT_DIR$/rov_cmd_dev.rb</url>
-          <line>530</line>
-          <option name="timeStamp" value="11" />
+          <line>434</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -605,8 +555,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="483" column="36" lean-forward="true" selection-start-line="483" selection-start-column="36" selection-end-line="483" selection-end-column="36" />
+        <state relative-caret-position="850">
+          <caret line="371" selection-start-line="371" selection-end-line="371" />
         </state>
       </provider>
     </entry>

@@ -291,11 +291,8 @@ class UserPrompter
   attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda, :nextPrompt, :prevPrompt
 
 
-  @@backStack        = [[], []]
-  @@backStackIndexer = 0
-  @@controlKeys      = {"b" => :back, "h" => :help}
-  @lastInput         = nil
-  @cursor            = TTY::Cursor
+  @controlKeys = {'b' => :back, 'h' => :help, 'q' => :quit}
+  @cursor      = TTY::Cursor
 
 
   # @param [String] promptStr
@@ -323,15 +320,7 @@ class UserPrompter
     end
   end
 
-
-  def nurseInput
-    if @nurse
-      @lastInput += 1 unless @lastInput.nil?
-    end
-  end
-
-
-  def prompt(promptStr = @promptStr, conditionalLambda)
+  def pp(promptStr = @promptStr)
     while true
       print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
       print @cursor.backward(@lastInput.to_s.length + 1)
@@ -357,125 +346,13 @@ class UserPrompter
     end
   end
 
-
-  # def prompt(promptStr = @pormtStr)
-  #   while true
-  #     nurseInput()
-  #     print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
-  #     print @cursor.backward(@lastInput.to_s.length + 1)
-  #     system("stty raw -echo") #=> Raw mode, no echo
-
-
-  #     userInput = STDIN.getc
-
-  #     if userInput == "q"
-  #       puts
-  #       return nil
-  #     elsif userInput != "\r"
-  #       print @cursor.clear_line_before
-  #       print userInput
-  #       userInput += STDIN.gets.chomp
-  #       if @checkValidInput.(userInput)
-  #         return @lastInput = @inputConverter_lambda.(userInput)
-  #       else
-  #         puts @errorMsg
-  #       end
-  #     else
-  #       puts @lastInput
-  #       return @lastInput
-  #     end
-
-
-  #     system("stty -raw echo") #=> Reset terminal mode
-
-  #   end
-  # end
-
-  def addToBackStack
-    puts "adding to back stack #{promptStr} #{@@backStackIndexer}"
-    @@backStack[@@backStackIndexer] << self
-  end
-
-  def goBack
-    if @@backStack[@@backStackIndexer].empty?
-      if @@backStackIndexer > 0
-        @@backStackIndexer -= 1
-        puts "popping back stack (was empty) #{promptStr} #{@@backStackIndexer}"
-        @@backStack[@@backStackIndexer].pop().pp
-        return false
-      else
-        puts "falied go back"
-        return false
-      end
-    end
-    puts "popping back stack  #{promptStr} #{@@backStackIndexer}"
-    if @thisBackStackGroup == @@backStackIndexer
-      @@backStack[@@backStackIndexer].pop().pp
-      return true
-    else
-      return false
-    end
-  end
-
-  def self.clearBackStack
-
-  end
-
-  def clear
-    @lastInput = nil
-  end
-
-  def result
-    @lastInput
-  end
-
-  # private
-
-  def navigate
-
-  end
-
-  def firstLink(fromLink = self)
-    @prevPrompt.nil? ? self : firstLink
-  end
-
-  def pp
-    puts @promptStr
-    input = STDIN.gets.chomp
-    if input == "b"
-      :back
-    else
-      @lastInput = input
-      true
-    end
-  end
-
-  def <<(other)
-    @prevPrompt = other
-    self
-  end
-
-
-  def >>(other)
-    if other.is_a?(Hash)
-      foo = other.first.last
-      puts foo.to_s
-      @nextPrompt.prepend other
-      other.first.last
-    else
-      @nextPrompt << ({-> res {true} => other})
-      # self
-      other
-    end
-  end
-
-  def self.runPrompt(promptToRun)
-
+  def runPrompt(promptStr = @promptStr)
+    promptToRun = self
     until promptToRun.nil?
-      case promptToRun.pp
+      case promptToRun.pp(promptStr)
         when true
           if promptToRun.nextPrompt.empty?
-           return
+            return
           end
           promptToRun.nextPrompt.each do |branchTree|
             condition, branchTo = branchTree.first
@@ -488,60 +365,58 @@ class UserPrompter
         when :back
           promptToRun = promptToRun.prevPrompt
       end
+    end
+  end
 
+
+  def clear
+    @lastInput = nil
+  end
+
+  def result
+    @lastInput
+  end
+
+  def firstLink
+    @prevPrompt.nil? ? self : @prevPrompt.firstLink
+  end
+
+  def <<(other)
+    @prevPrompt = other
+    self
+  end
+
+  def >>(other)
+    if other.is_a?(Hash)
+      #Change last
+      @nextPrompt.prepend ({other.first.first => other.first.last.firstLink})
+      other.first.last << self
+    else
+      @nextPrompt << ({-> res {true} => other})
+      other << self
     end
   end
 
 end
-
-# require 'tty-prompt'
-#
-# prompt = TTY::Prompt.new
-
 
 puts "starting.."
 puts
 puts
 
 
-a = UserPrompter.new(" a ~>".bg_cyan)
-b = UserPrompter.new(" b ~>".bg_cyan, a)
-c = UserPrompter.new(" c ~>".bg_cyan, b)
-d = UserPrompter.new(" d ~>".bg_cyan, c)
-e = UserPrompter.new(" e ~>".bg_cyan, d)
-
-ca = UserPrompter.new("ca ~>".bg_cyan, c)
-cb = UserPrompter.new("cb ~>".bg_cyan, d)
+a  = UserPrompter.new(" a ~> ".bg_cyan)
+b  = UserPrompter.new(" b ~> ".bg_cyan, a)
+c  = UserPrompter.new(" c ~> ".bg_cyan, b)
+d  = UserPrompter.new(" d ~> ".bg_cyan, c)
+e  = UserPrompter.new(" e ~> ".bg_cyan, d)
+ca = UserPrompter.new("ca ~> ".bg_cyan, c)
+cb = UserPrompter.new("cb ~> ".bg_cyan, d)
 
 a >> b >> c >> d >> e
-# ca >> cb >> d
+
 c >> {-> res {res == "foo"} => ca >> cb >> d}
 
-
-# f = { lambda {|res| res != "foo"} => "ca"}
-# f = lambda {|res| res == "foo"}
-
-# puts f.first.first.call("foo")
-# puts f.to_s
-
-# bar = f
-
-# bar.call("foo")
-
-UserPrompter.runPrompt(a)
-
-# a.pp()
-# b.pp()
-# # c.pp -> res {
-# #
-# #   if res == "foo"
-# #     ca.pp
-# #     cb.pp
-# #   end
-# # }
-# d.pp()
-# e.pp()
-
+a.runPrompt
 
 puts "result for a is #{a.result}"
 puts "result for b is #{b.result}"
