@@ -406,24 +406,31 @@ puts
 puts
 
 
-a  = UserPrompter.new(" a ~> ".bg_cyan)
-b  = UserPrompter.new(" b ~> ".bg_cyan, a)
-c  = UserPrompter.new(" c ~> ".bg_cyan, b)
-d  = UserPrompter.new(" d ~> ".bg_cyan, c)
-e  = UserPrompter.new(" e ~> ".bg_cyan, d)
-ca = UserPrompter.new("ca ~> ".bg_cyan, c)
-cb = UserPrompter.new("cb ~> ".bg_cyan, d)
+# a  = UserPrompter.new(" a ~> ".bg_cyan)
+# b  = UserPrompter.new(" b ~> ".bg_cyan, a)
+# c  = UserPrompter.new(" c ~> ".bg_cyan, b)
+# d  = UserPrompter.new(" d ~> ".bg_cyan, c)
+# e  = UserPrompter.new(" e ~> ".bg_cyan, d)
+# ca = UserPrompter.new("ca ~> ".bg_cyan, c)
+# cb = UserPrompter.new("cb ~> ".bg_cyan, d)
+#
+# a >> b >> c >> d >> e
+#
+# c >> {-> res {res == "foo"} => ca >> cb >> d}
+#
+# a.runPrompt
+#
+# puts "result for a is #{a.result}"
+# puts "result for b is #{b.result}"
+# puts "result for c is #{c.result}"
+# puts "result for d is #{d.result}"
+# puts "result for e is #{e.result}"
+#
 
-a >> b >> c >> d >> e
+require 'tty-prompt'
 
-c >> {-> res {res == "foo"} => ca >> cb >> d}
-
-a.runPrompt
-
-puts "result for a is #{a.result}"
-puts "result for b is #{b.result}"
-puts "result for c is #{c.result}"
-puts "result for d is #{d.result}"
-puts "result for e is #{e.result}"
-
-
+prompt = TTY::Prompt.new
+prompt.ask('What is your name?', default: ENV['USER'])
+prompt.ask('Enter text:') do |q|
+  q.modify :strip, :collapse
+end
