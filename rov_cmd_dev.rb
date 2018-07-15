@@ -401,11 +401,11 @@ class UserPrompter
 
 end
 
-puts "starting.."
-puts
-puts
-
-
+# puts "starting.."
+# puts
+# puts
+#
+#
 # a  = UserPrompter.new(" a ~> ".bg_cyan)
 # b  = UserPrompter.new(" b ~> ".bg_cyan, a)
 # c  = UserPrompter.new(" c ~> ".bg_cyan, b)
@@ -425,12 +425,86 @@ puts
 # puts "result for c is #{c.result}"
 # puts "result for d is #{d.result}"
 # puts "result for e is #{e.result}"
+
+
+# require 'tty-prompt'
 #
+# prompt = TTY::Prompt.new
+# prompt.ask('What is your name?', default: ENV['USER'])
+# prompt.ask('Enter text:') do |q|
+#   q.modify :strip, :collapse
+# end
 
-require 'tty-prompt'
 
-prompt = TTY::Prompt.new
-prompt.ask('What is your name?', default: ENV['USER'])
-prompt.ask('Enter text:') do |q|
-  q.modify :strip, :collapse
+
+
+@cursor      = TTY::Cursor
+@reader      = TTY::Reader.new
+@moveBack = false
+@inputStart = 0
+promptStr ="This is it ~> "
+
+@keysDown = 0
+@backDown = 0
+
+@reader.on(:keypress) do |event|
+  @keysDown += 1
+  # puts @keysDown
+
 end
+
+@reader.on(:keybackspace) do |event|
+  @backDown += 1
+  # puts
+  # puts @backDown
+  # puts @keysDown
+  if @keysDown < @backDown
+    @cursor.backward(1)
+    @cursor.clear_line_before
+  end
+  # puts @cursor.current == promptStr.length+1
+  # puts @cursor.current.bytes.to_a
+  # puts promptStr.length+1
+  # if @cursor.current == promptStr.length+1
+  #   @cursor.backward(1)
+  #   @cursor.clear_line_before
+  # end
+end
+
+@lastInput = "123"
+userInput = ""
+print promptStr + @lastInput.gray
+print @cursor.backward(@lastInput.to_s.length)
+userInput = @reader.read_keypress
+print @cursor.clear_line
+@reader.read_line(promptStr + userInput)
+
+
+# Thread.new do
+#   userInput = @reader.read_line("This is it ~> "+ @lastInput.gray)
+#
+#   # print @cursor.backward(@lastInput.to_s.length)
+# end
+# # Thread.new do
+#   print @cursor.backward(@lastInput.to_s.length)
+# # end
+
+# print @cursor.clear_line
+# userInput = @reader.read_line("This is it ~> ")
+
+# @reader.trigger(:keydown)
+# @reader.read_keypress
+#
+# # @reader.input
+#
+# # until @cont
+# # end
+#
+# @reader.on(:keydown) do |event|
+#   @cont = true
+#   userInput = @reader.read_line("This is it ~> ")
+#
+# end
+
+gets
+
