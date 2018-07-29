@@ -91,7 +91,7 @@ class UserPrompter
   end
 
   def clear
-    @lastInput = nil
+    @lastInput = ''
   end
 
 end

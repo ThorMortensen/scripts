@@ -37,6 +37,10 @@ class String
   def blink;          "\e[5m#{self}\e[25m" end
   def reverse_color;  "\e[7m#{self}\e[27m" end
 
+  def clearColor
+    gsub(/#{"\e"}\[\d*m/n, '')
+  end
+
   def is_integer?
     self.to_i.to_s == self
   end
@@ -295,12 +299,12 @@ class UserPrompter
   @controlKeys = {'b' => :back, 'h' => :help, 'q' => :quit}
 
 
-
   # @param [String] promptStr
   def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
     @nextPrompt = []
-    @cursor      = TTY::Cursor
-    @reader      = TTY::Reader.new
+    @cursor     = TTY::Cursor
+    @reader     = TTY::Reader.new
+    @branchCond = -> res {false}
 
     @promptStr = promptStr
     if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
@@ -323,35 +327,53 @@ class UserPrompter
     end
   end
 
-  def pp(promptStr = @promptStr)
-    while true
-      # print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
-      userInput = @reader.read_line("#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} ")
-      print @cursor.backward(@lastInput.to_s.length + 1)
+  def getFormattedPromptStr(promptStr)
+    "#{promptStr}#{@lastInput.nil? ? '' : '(' + @lastInput.to_s.gray + ')'} ~> "
+  end
 
-      # system("stty raw -echo") #=> Raw mode, no echo
-      # userInput = STDIN.getc
-      # system("stty -raw echo") #=> Reset terminal mode
-      if userInput == "b"
-        # puts
-        return :back
-      else #if userInput != "\r"
-        # print @cursor.clear_line_before
-        # print userInput
-        # userInput += STDIN.gets.chomp
-        if @checkValidInput.(userInput)
-          @lastInput = @inputConverter_lambda.(userInput)
-        else
-          puts @errorMsg
-        end
-      end
+  def pp(promptStr = @promptStr)
+    userInput = @reader.read_line(getFormattedPromptStr(promptStr)).chomp!
+
+    if userInput.empty?
+      print @cursor.prev_line  + @cursor.forward(getFormattedPromptStr(promptStr).clearColor.length)
+      print @lastInput.to_s.green
+      print @cursor.next_line
+
+      userInput = @lastInput.to_s
+    end
+
+    if @branchCond.call(userInput)
+      @lastInput = userInput
+      true
+    elsif @checkValidInput.(userInput)
+      @lastInput = @inputConverter_lambda.(userInput)
+      true
+    elsif userInput == "b"
+      :back
+    else
+      puts @errorMsg
     end
   end
 
-  def runPrompt(promptStr = @promptStr)
+
+  # def pp(foo)
+  #   # puts @promptStr
+  #   input = @reader.read_line("#{promptStr}#{@lastInput.nil? ? '' : '(' + @lastInput.to_s.gray + ')'} ~> ").chomp!
+  #   print input
+  #   # input = STDIN.gets.chomp
+  #   if input == "b"
+  #     puts "hello"
+  #     :back
+  #   else
+  #     @lastInput = input
+  #     true
+  #   end
+  # end
+
+  def runPrompt
     promptToRun = self
     until promptToRun.nil?
-      case promptToRun.pp(promptStr)
+      case promptToRun.pp
         when true
           if promptToRun.nextPrompt.empty?
             return
@@ -370,6 +392,16 @@ class UserPrompter
     end
   end
 
+  def printBranchTree
+    prompter = self
+    until prompter.nil?
+      puts "I'm " + @promptStr
+      prompter.nextPrompt.each do |branchTree|
+        condition, branchTo = branchTree.first
+        prompter            = branchTo
+      end
+    end
+  end
 
   def clear
     @lastInput = nil
@@ -391,6 +423,7 @@ class UserPrompter
   def >>(other)
     if other.is_a?(Hash)
       #Change last
+      @branchCond = other.first.first
       @nextPrompt.prepend ({other.first.first => other.first.last.firstLink})
       other.first.last << self
     else
@@ -401,110 +434,66 @@ class UserPrompter
 
 end
 
-# puts "starting.."
+puts "starting.."
 # puts
 # puts
-#
-#
-# a  = UserPrompter.new(" a ~> ".bg_cyan)
-# b  = UserPrompter.new(" b ~> ".bg_cyan, a)
-# c  = UserPrompter.new(" c ~> ".bg_cyan, b)
-# d  = UserPrompter.new(" d ~> ".bg_cyan, c)
-# e  = UserPrompter.new(" e ~> ".bg_cyan, d)
-# ca = UserPrompter.new("ca ~> ".bg_cyan, c)
-# cb = UserPrompter.new("cb ~> ".bg_cyan, d)
-#
-# a >> b >> c >> d >> e
-#
-# c >> {-> res {res == "foo"} => ca >> cb >> d}
-#
-# a.runPrompt
-#
-# puts "result for a is #{a.result}"
-# puts "result for b is #{b.result}"
-# puts "result for c is #{c.result}"
-# puts "result for d is #{d.result}"
-# puts "result for e is #{e.result}"
 
 
-# require 'tty-prompt'
-#
-# prompt = TTY::Prompt.new
-# prompt.ask('What is your name?', default: ENV['USER'])
-# prompt.ask('Enter text:') do |q|
-#   q.modify :strip, :collapse
-# end
+a  = UserPrompter.new(" a ".bg_cyan)
+b  = UserPrompter.new(" b ".bg_cyan)
+c  = UserPrompter.new(" c ".bg_cyan)
+d  = UserPrompter.new(" d ".bg_cyan)
+e  = UserPrompter.new(" e ".bg_cyan)
+ca = UserPrompter.new("ca ".bg_cyan)
+cb = UserPrompter.new("cb ".bg_cyan)
 
+a >> b >> c >> d >> e
 
+c >> {-> res {res == "foo"} => ca >> cb >> d}
 
+# a.printBranchTree
+a.runPrompt
 
-@cursor      = TTY::Cursor
-@reader      = TTY::Reader.new
-@moveBack = false
-@inputStart = 0
-promptStr ="This is it ~> "
+puts "result for a is #{a.result}"
+puts "result for b is #{b.result}"
+puts "result for c is #{c.result}"
+puts "result for d is #{d.result}"
+puts "result for e is #{e.result}"
 
-@keysDown = 0
-@backDown = 0
+foo = "hello world".red + " foo" + "bla ~> ".green
 
-@reader.on(:keypress) do |event|
-  @keysDown += 1
-  # puts @keysDown
+File.open("testOut", 'w') {|file| file.write("          f")}
 
+foo.each_byte do |c|
+  puts c
 end
+# puts foo
 
-@reader.on(:keybackspace) do |event|
-  @backDown += 1
-  # puts
-  # puts @backDown
-  # puts @keysDown
-  if @keysDown < @backDown
-    @cursor.backward(1)
-    @cursor.clear_line_before
-  end
-  # puts @cursor.current == promptStr.length+1
-  # puts @cursor.current.bytes.to_a
-  # puts promptStr.length+1
-  # if @cursor.current == promptStr.length+1
-  #   @cursor.backward(1)
-  #   @cursor.clear_line_before
-  # end
-end
-
-@lastInput = "123"
-userInput = ""
-print promptStr + @lastInput.gray
-print @cursor.backward(@lastInput.to_s.length)
-userInput = @reader.read_keypress
-print @cursor.clear_line
-@reader.read_line(promptStr + userInput)
-
-
-# Thread.new do
-#   userInput = @reader.read_line("This is it ~> "+ @lastInput.gray)
+puts foo.clearColor
 #
-#   # print @cursor.backward(@lastInput.to_s.length)
-# end
-# # Thread.new do
-#   print @cursor.backward(@lastInput.to_s.length)
-# # end
+# puts foo.match /\[\d*m\#(.*)[[:ascii:]]\[0m/n
+# puts foo.match /.*(.*).*/
+# puts foo.match(/.*\[\d*m\#(.*).*\[0m/)
+# File.open("testOut", 'w') { |file| file.write(foo.match(/.*\[\d*m\#(.*).*\[0m/)) }
 
-# print @cursor.clear_line
-# userInput = @reader.read_line("This is it ~> ")
+# puts foo.match(/(.*)/)[0]
 
-# @reader.trigger(:keydown)
-# @reader.read_keypress
-#
-# # @reader.input
-#
-# # until @cont
-# # end
-#
-# @reader.on(:keydown) do |event|
-#   @cont = true
-#   userInput = @reader.read_line("This is it ~> ")
-#
-# end
 
-gets
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
