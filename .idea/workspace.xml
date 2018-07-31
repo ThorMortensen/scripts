@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="" />
+    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rov_cmd.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,27 +22,39 @@
     <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1530219112067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@rov_cmd.rcov" NAME="rov_cmd Coverage Results" MODIFIED="1530087849311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@testScript.coverage" NAME="testScript Coverage Results" MODIFIED="1511350865262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
+    <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1532897930672" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
+    <SUITE FILE_PATH="coverage/scripts@rov_cmd.rcov" NAME="rov_cmd Coverage Results" MODIFIED="1530087849311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="112635537">
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="rb" value="1927" />
+          <entry key="rb" value="3708" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ruby" value="1927" />
+          <entry key="Ruby" value="3708" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="rb" value="2" />
+          <entry key="rb" value="8" />
+          <entry key="testOut" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Ruby" value="2" />
+          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="Ruby" value="8" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="7" />
+          <entry key="project.open.time.5" value="5" />
+          <entry key="project.open.time.6" value="2" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
     </session>
@@ -79,11 +95,61 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rov_cmd.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="86">
+              <caret line="60" column="13" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
-              <caret line="435" column="3" selection-start-line="435" selection-start-column="3" selection-end-line="435" selection-end-column="3" />
+            <state relative-caret-position="518">
+              <caret line="338" column="28" selection-start-line="338" selection-start-column="28" selection-end-line="338" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/testOut">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///var/lib/gems/2.5.0/gems/wisper-2.0.0/lib/wisper/publisher.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.gem/ruby/2.5.0/gems/tty-cursor-0.5.0/lib/tty/cursor.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="833">
+              <caret line="49" column="8" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2839">
+              <caret line="167" column="42" selection-start-line="167" selection-start-column="35" selection-end-line="167" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_HOME_DIR$/rubystubs25/builtin.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4641">
+              <caret line="273" selection-start-line="273" selection-end-line="273" />
             </state>
           </provider>
         </entry>
@@ -109,6 +175,8 @@
       <find>add</find>
       <find>Promt</find>
       <find>conditionalLambda</find>
+      <find>@cursor</find>
+      <find>default</find>
     </findStrings>
     <replaceStrings>
       <replace>SCRIPTS_FOLDER_PATH</replace>
@@ -144,8 +212,9 @@
         <option value="$PROJECT_DIR$/cmdDiscriptions.yml" />
         <option value="$PROJECT_DIR$/raw_masc_cmd_connection.rb" />
         <option value="$PROJECT_DIR$/+masc_cmd" />
-        <option value="$PROJECT_DIR$/rov_cmd.rb" />
         <option value="$PROJECT_DIR$/rubyHelpers.rb" />
+        <option value="/var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb" />
+        <option value="$PROJECT_DIR$/rov_cmd.rb" />
         <option value="$PROJECT_DIR$/rov_cmd_dev.rb" />
       </list>
     </option>
@@ -163,10 +232,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="62" />
-    <option name="y" value="479" />
-    <option name="width" value="1850" />
-    <option name="height" value="789" />
+    <option name="x" value="55" />
+    <option name="y" value="25" />
+    <option name="width" value="933" />
+    <option name="height" value="1055" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -190,9 +259,9 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/GITHUB_SETTINGS" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/tty-prompt" />
     <property name="project.settings.patched" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Ruby" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.ruby.settings.RubyActiveModuleSdkConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -327,12 +396,20 @@
       <workItem from="1530185687458" duration="691000" />
       <workItem from="1530210026054" duration="7015000" />
       <workItem from="1530256939427" duration="842000" />
-      <workItem from="1532096166765" duration="599000" />
+      <workItem from="1530297303365" duration="8433000" />
+      <workItem from="1530392736707" duration="599000" />
+      <workItem from="1532709929325" duration="70000" />
+      <workItem from="1532892025681" duration="4889000" />
+      <workItem from="1532897581195" duration="140000" />
+      <workItem from="1532897738825" duration="38000" />
+      <workItem from="1532897831802" duration="5612000" />
+      <workItem from="1532903455546" duration="40000" />
+      <workItem from="1532904099528" duration="3593000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="148826000" />
+    <option name="totallyTimeSpent" value="171641000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -344,16 +421,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-2" width="1920" height="1082" extended-state="6" />
+    <frame x="55" y="25" width="1865" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18943436" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20505773" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.491689" weight="0.36796537" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919572" weight="0.29545453" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.12987013" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.35281384" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.29979676" />
@@ -516,13 +593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rov_cmd.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="64" selection-start-line="64" selection-end-line="64" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
@@ -558,12 +628,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb" />
     <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader/line.rb" />
+    <entry file="file://$PROJECT_DIR$/rov_cmd.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="86">
+          <caret line="60" column="13" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///var/lib/gems/2.5.0/gems/wisper-2.0.0/lib/wisper/publisher.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.gem/ruby/2.5.0/gems/tty-cursor-0.5.0/lib/tty/cursor.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="833">
+          <caret line="49" column="8" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2839">
+          <caret line="167" column="42" selection-start-line="167" selection-start-column="35" selection-end-line="167" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/rubystubs25/builtin.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4641">
+          <caret line="273" selection-start-line="273" selection-end-line="273" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testOut">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="435" column="3" selection-start-line="435" selection-start-column="3" selection-end-line="435" selection-end-column="3" />
+        <state relative-caret-position="518">
+          <caret line="338" column="28" selection-start-line="338" selection-start-column="28" selection-end-line="338" selection-end-column="28" />
         </state>
       </provider>
     </entry>
