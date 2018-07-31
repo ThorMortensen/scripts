@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
-    </list>
+    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +45,7 @@
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.5" value="6" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.opened" value="8" />
@@ -402,12 +399,12 @@
       <workItem from="1532897831802" duration="5612000" />
       <workItem from="1532903455546" duration="40000" />
       <workItem from="1532904099528" duration="3593000" />
-      <workItem from="1533058746322" duration="10020000" />
+      <workItem from="1533058746322" duration="10058000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="181661000" />
+    <option name="totallyTimeSpent" value="181699000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
