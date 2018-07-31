@@ -300,11 +300,12 @@ class UserPrompter
 
 
   # @param [String] promptStr
-  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i})
-    @nextPrompt = []
-    @cursor     = TTY::Cursor
-    @reader     = TTY::Reader.new
-    @branchCond = -> res {false}
+  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be or produce a number', inputConverter_lambda = -> input {input.to_i})
+    @nextPrompt      = []
+    @cursor          = TTY::Cursor
+    @reader          = TTY::Reader.new
+    @branchCond      = -> res {false}
+    @lastLambdaInput = nil
 
     @promptStr = promptStr
     if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
@@ -328,31 +329,75 @@ class UserPrompter
   end
 
   def getFormattedPromptStr(promptStr)
-    "#{promptStr}#{@lastInput.nil? ? '' : '(' + @lastInput.to_s.gray + ')'} ~> "
+    "#{promptStr}#{
+    if @lastInput.nil?
+      ''
+    else
+      '(' + ((@lastLambdaInput.nil? ? '' : @lastLambdaInput.to_s + " = ") + @lastInput.to_s).gray + ')'
+    end} ~> "
   end
 
-  def pp(promptStr = @promptStr)
-    userInput = @reader.read_line(getFormattedPromptStr(promptStr)).chomp!
+  def evaluateUserLambdaInput(userInput)
+    userLambdaRes = eval(userInput).call(@lastInput)
+  end
+
+  def appendTextToLastUserInput(str, offset = 0)
+    print @cursor.prev_line + @cursor.forward(getFormattedPromptStr(promptStr).clearColor.length + offset)
+    print str
+    print @cursor.next_line
+  end
+
+  def pp(promptStr = @promptStr, trumpUserInput = nil)
+
+    userInput = trumpUserInput.nil? ? @reader.read_line(getFormattedPromptStr(promptStr)).chomp! : trumpUserInput.to_s
 
     if userInput.empty?
-      print @cursor.prev_line  + @cursor.forward(getFormattedPromptStr(promptStr).clearColor.length)
-      print @lastInput.to_s.green
-      print @cursor.next_line
-
-      userInput = @lastInput.to_s
+      if @lastLambdaInput.nil?
+        appendTextToLastUserInput(@lastInput.to_s.green)
+        userInput = @lastInput.to_s
+      else
+        userInput = @lastLambdaInput
+      end
+    else
+      @lastLambdaInput = nil
     end
 
     if @branchCond.call(userInput)
       @lastInput = userInput
       true
+    elsif (m = userInput.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/))
+      unless m[1].empty?
+        pp(promptStr, m[1])
+      end
+
+      if @lastInput.nil?
+        puts "Missing input to lambda. Start with number I.e 42 -> res {res + 1}"
+        return false
+      end
+
+      if pp(promptStr, evaluateUserLambdaInput(m[2]))
+        if @lastLambdaInput.nil?
+          appendTextToLastUserInput(" = " + result.to_s.green)
+        else
+          appendTextToLastUserInput(@lastLambdaInput + " = " + result.to_s.green)
+        end
+      else
+        return false
+      end
+      @lastLambdaInput = userInput
+      true
+
     elsif @checkValidInput.(userInput)
       @lastInput = @inputConverter_lambda.(userInput)
       true
+
     elsif userInput == "b"
       :back
     else
       puts @errorMsg
     end
+
+
   end
 
 
@@ -403,6 +448,10 @@ class UserPrompter
     end
   end
 
+  def tree?
+
+  end
+
   def clear
     @lastInput = nil
   end
@@ -449,36 +498,23 @@ cb = UserPrompter.new("cb ".bg_cyan)
 
 a >> b >> c >> d >> e
 
-c >> {-> res {res == "foo"} => ca >> cb >> d}
+c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
 
-# a.printBranchTree
 a.runPrompt
-
-puts "result for a is #{a.result}"
-puts "result for b is #{b.result}"
-puts "result for c is #{c.result}"
-puts "result for d is #{d.result}"
-puts "result for e is #{e.result}"
-
-foo = "hello world".red + " foo" + "bla ~> ".green
-
-File.open("testOut", 'w') {|file| file.write("          f")}
-
-foo.each_byte do |c|
-  puts c
-end
-# puts foo
-
-puts foo.clearColor
 #
-# puts foo.match /\[\d*m\#(.*)[[:ascii:]]\[0m/n
-# puts foo.match /.*(.*).*/
-# puts foo.match(/.*\[\d*m\#(.*).*\[0m/)
-# File.open("testOut", 'w') { |file| file.write(foo.match(/.*\[\d*m\#(.*).*\[0m/)) }
+# puts "result for a is #{a.result}"
+# puts "result for b is #{b.result}"
+# puts "result for c is #{c.result}"
+# puts "result for d is #{d.result}"
+# puts "result for e is #{e.result}"
 
-# puts foo.match(/(.*)/)[0]
 
-
+# foo = "-f> res {res + 1}"
+# m   = foo.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/)
+#
+# puts m[0]
+# puts m[1]
+# puts m[2]
 
 
 
