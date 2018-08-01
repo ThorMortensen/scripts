@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
-    </list>
+    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -106,8 +103,8 @@
       <file leaf-file-name="rov_cmd_dev.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2041">
-              <caret line="389" column="94" selection-start-line="389" selection-start-column="94" selection-end-line="389" selection-end-column="94" />
+            <state relative-caret-position="216">
+              <caret line="517" column="36" lean-forward="true" selection-start-line="517" selection-start-column="36" selection-end-line="517" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -420,12 +417,12 @@
       <workItem from="1533058746322" duration="10058000" />
       <workItem from="1533141831122" duration="6251000" />
       <workItem from="1533150820020" duration="381000" />
-      <workItem from="1533151266792" duration="5969000" />
+      <workItem from="1533151266792" duration="5990000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="194300000" />
+    <option name="totallyTimeSpent" value="194321000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -451,7 +448,7 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4841823" weight="0.35683298" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.35238096" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.35238096" />
       <window_info anchor="bottom" id="Code comment" order="11" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -700,8 +697,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2041">
-          <caret line="389" column="94" selection-start-line="389" selection-start-column="94" selection-end-line="389" selection-end-column="94" />
+        <state relative-caret-position="216">
+          <caret line="517" column="36" lean-forward="true" selection-start-line="517" selection-start-column="36" selection-end-line="517" selection-end-column="36" />
         </state>
       </provider>
     </entry>
