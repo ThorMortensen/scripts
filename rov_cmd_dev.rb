@@ -38,7 +38,7 @@ class String
   def reverse_color;  "\e[7m#{self}\e[27m" end
 
   def clearColor
-    gsub(/#{"\e"}\[\d*m/n, '')
+    gsub(/(#{"\e"}\[\d*m)/n, '')
   end
 
   def is_integer?
@@ -300,10 +300,10 @@ class UserPrompter
 
 
   # @param [String] promptStr
-  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be or produce a number', inputConverter_lambda = -> input {input.to_i})
+  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be (or produce) a number', inputConverter_lambda = -> input {input.to_i})
     @nextPrompt      = []
     @cursor          = TTY::Cursor
-    @reader          = TTY::Reader.new
+    @reader          = TTY::Reader.new(interrupt: -> {puts "\nBye" ; exit(1)})
     @branchCond      = -> res {false}
     @lastLambdaInput = nil
 
@@ -330,7 +330,7 @@ class UserPrompter
 
   def getFormattedPromptStr(promptStr)
     "#{promptStr}#{
-    if @lastInput.nil?
+    if @lastInput.nil? and @lastLambdaInput.nil?
       ''
     else
       '(' + ((@lastLambdaInput.nil? ? '' : @lastLambdaInput.to_s + " = ") + @lastInput.to_s).gray + ')'
@@ -339,33 +339,38 @@ class UserPrompter
 
   def evaluateUserLambdaInput(userInput)
     userLambdaRes = eval(userInput).call(@lastInput)
+    userLambdaRes
   end
 
-  def appendTextToLastUserInput(str, offset = 0)
-    print @cursor.prev_line + @cursor.forward(getFormattedPromptStr(promptStr).clearColor.length + offset)
-    print str
+  def appendTextToLastUserInput(offsetOrPromptStr ,strToAppend)
+    endOfPrevLine = offsetOrPromptStr.is_a?(Integer) ? offsetOrPromptStr : getFormattedPromptStr(offsetOrPromptStr).clearColor.length
+    print @cursor.prev_line + @cursor.forward(endOfPrevLine)
+    print strToAppend
     print @cursor.next_line
   end
 
   def pp(promptStr = @promptStr, trumpUserInput = nil)
 
-    userInput = trumpUserInput.nil? ? @reader.read_line(getFormattedPromptStr(promptStr)).chomp! : trumpUserInput.to_s
+    userInput = trumpUserInput.nil? ? @reader.read_line(getFormattedPromptStr(promptStr)) : trumpUserInput.to_s
+    userInput.chomp!
+    wasEmptyInput = userInput.empty?
 
-    if userInput.empty?
+    if wasEmptyInput
       if @lastLambdaInput.nil?
-        appendTextToLastUserInput(@lastInput.to_s.green)
+        appendTextToLastUserInput(promptStr, @lastInput.to_s.green)
         userInput = @lastInput.to_s
       else
         userInput = @lastLambdaInput
       end
-    else
-      @lastLambdaInput = nil
     end
 
     if @branchCond.call(userInput)
       @lastInput = userInput
       true
     elsif (m = userInput.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/))
+
+      lastPromptStrLen = getFormattedPromptStr(promptStr).clearColor.length
+
       unless m[1].empty?
         pp(promptStr, m[1])
       end
@@ -375,20 +380,28 @@ class UserPrompter
         return false
       end
 
+      lastLambdaInputTemp = @lastLambdaInput # Take a copy before set to new val. Needed to see if this was a new lambda or recall
+
+
+      @lastLambdaInput = m[2] # Need to set this for nex recursive call to pp
+
       if pp(promptStr, evaluateUserLambdaInput(m[2]))
-        if @lastLambdaInput.nil?
-          appendTextToLastUserInput(" = " + result.to_s.green)
+        if lastLambdaInputTemp.nil?
+          appendTextToLastUserInput(lastPromptStrLen + m[0].length, " = " + result.to_s.green)
         else
-          appendTextToLastUserInput(@lastLambdaInput + " = " + result.to_s.green)
+          @lastLambdaInput = m[2]
+          appendTextToLastUserInput(promptStr, (wasEmptyInput ? '' : ' = ') + result.to_s.green)
         end
       else
+        @lastLambdaInput = nil
         return false
       end
-      @lastLambdaInput = userInput
+      @lastLambdaInput = m[2]
       true
 
     elsif @checkValidInput.(userInput)
       @lastInput = @inputConverter_lambda.(userInput)
+      @lastLambdaInput = nil
       true
 
     elsif userInput == "b"
@@ -488,7 +501,7 @@ puts "starting.."
 # puts
 
 
-a  = UserPrompter.new(" a ".bg_cyan)
+a  = UserPrompter.new(" asdasdasda ".bg_cyan)
 b  = UserPrompter.new(" b ".bg_cyan)
 c  = UserPrompter.new(" c ".bg_cyan)
 d  = UserPrompter.new(" d ".bg_cyan)
@@ -515,7 +528,9 @@ a.runPrompt
 # puts m[0]
 # puts m[1]
 # puts m[2]
-
+#
+# reader = TTY::Reader.new(interrupt: -> {puts "hello"})
+# reader.read_line
 
 
 
