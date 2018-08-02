@@ -32,6 +32,7 @@ class String
   def bg_gray;        "\e[47m#{self}\e[0m" end
 
   def bold;           "\e[1m#{self}\e[22m" end
+  def dim;            "\e[2m#{self}\e[22m" end
   def italic;         "\e[3m#{self}\e[23m" end
   def underline;      "\e[4m#{self}\e[24m" end
   def blink;          "\e[5m#{self}\e[25m" end
@@ -303,7 +304,7 @@ class UserPrompter
   def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be (or produce) a number', inputConverter_lambda = -> input {input.to_i})
     @nextPrompt      = []
     @cursor          = TTY::Cursor
-    @reader          = TTY::Reader.new(interrupt: -> {puts "\nBye" ; exit(1)})
+    @reader          = TTY::Reader.new(interrupt: -> {puts "\nBye"; exit(1)})
     @branchCond      = -> res {false}
     @lastLambdaInput = nil
 
@@ -333,7 +334,7 @@ class UserPrompter
     if @lastInput.nil? and @lastLambdaInput.nil?
       ''
     else
-      '(' + ((@lastLambdaInput.nil? ? '' : @lastLambdaInput.to_s + " = ") + @lastInput.to_s).gray + ')'
+      '(' + ((@lastLambdaInput.nil? ? '' : @lastLambdaInput.to_s + " = ") + @lastInput.to_s).gray.dim + ')'
     end} ~> "
   end
 
@@ -342,7 +343,7 @@ class UserPrompter
     userLambdaRes
   end
 
-  def appendTextToLastUserInput(offsetOrPromptStr ,strToAppend)
+  def appendTextToLastUserInput(offsetOrPromptStr, strToAppend)
     endOfPrevLine = offsetOrPromptStr.is_a?(Integer) ? offsetOrPromptStr : getFormattedPromptStr(offsetOrPromptStr).clearColor.length
     print @cursor.prev_line + @cursor.forward(endOfPrevLine)
     print strToAppend
@@ -369,14 +370,21 @@ class UserPrompter
       true
     elsif (m = userInput.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/))
 
+      lambdaHelpStr = "Please start with number I.e 42 -> res {res + 1}"
+
       lastPromptStrLen = getFormattedPromptStr(promptStr).clearColor.length
 
-      unless m[1].empty?
+      if m[1].empty?
+        unless @lastLambdaInput.nil?
+          puts "Can't use nested lambdas. " + lambdaHelpStr
+          return false
+        end
+      else
         pp(promptStr, m[1])
       end
 
       if @lastInput.nil?
-        puts "Missing input to lambda. Start with number I.e 42 -> res {res + 1}"
+        puts "Missing input to lambda." + lambdaHelpStr
         return false
       end
 
@@ -400,7 +408,7 @@ class UserPrompter
       true
 
     elsif @checkValidInput.(userInput)
-      @lastInput = @inputConverter_lambda.(userInput)
+      @lastInput       = @inputConverter_lambda.(userInput)
       @lastLambdaInput = nil
       true
 
@@ -513,7 +521,7 @@ a >> b >> c >> d >> e
 
 c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
 
-a.runPrompt
+# a.runPrompt
 #
 # puts "result for a is #{a.result}"
 # puts "result for b is #{b.result}"
@@ -531,9 +539,15 @@ a.runPrompt
 #
 # reader = TTY::Reader.new(interrupt: -> {puts "hello"})
 # reader.read_line
+#
+#
 
 
+samples = [123,4,53,6,7,2,35,654] #,2,23]
 
+
+puts samples.sum() / samples.length
+puts samples.sum() >> 3
 
 
 
