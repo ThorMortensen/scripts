@@ -339,8 +339,19 @@ class UserPrompter
   end
 
   def evaluateUserLambdaInput(userInput)
-    userLambdaRes = eval(userInput).call(@lastInput)
-    userLambdaRes
+    userLambdaRes = nil
+    runOk = true
+    begin
+      userLambdaRes = eval(userInput).call(@lastInput)
+      userLambdaRes
+    rescue SyntaxError, NameError => boom
+      puts "Input lambda doesn't compile: " + boom.to_s
+      runOk = false
+    rescue StandardError => bang
+      puts "Error running input lambda: " + bang.to_s
+      runOk = false
+    end
+    return runOk , userLambdaRes
   end
 
   def appendTextToLastUserInput(offsetOrPromptStr, strToAppend)
@@ -370,7 +381,7 @@ class UserPrompter
       true
     elsif (m = userInput.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/))
 
-      lambdaHelpStr = "Please start with number I.e 42 -> res {res + 1}"
+      lambdaHelpStr = "Please start with number I.e 42 -> r {r + 1}"
 
       lastPromptStrLen = getFormattedPromptStr(promptStr).clearColor.length
 
@@ -393,9 +404,16 @@ class UserPrompter
 
       @lastLambdaInput = m[2] # Need to set this for nex recursive call to pp
 
-      if pp(promptStr, evaluateUserLambdaInput(m[2]))
+      runOk , res = evaluateUserLambdaInput(m[2])
+
+      unless runOk
+        @lastLambdaInput = nil
+        return false
+      end
+
+      if pp(promptStr,res )
         if lastLambdaInputTemp.nil?
-          appendTextToLastUserInput(lastPromptStrLen + m[0].length, " = " + result.to_s.green)
+          appendTextToLastUserInput(lastPromptStrLen + m[0].length + 1, " = " + result.to_s.green)
         else
           @lastLambdaInput = m[2]
           appendTextToLastUserInput(promptStr, (wasEmptyInput ? '' : ' = ') + result.to_s.green)
@@ -521,13 +539,13 @@ a >> b >> c >> d >> e
 
 c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
 
-# a.runPrompt
-#
-# puts "result for a is #{a.result}"
-# puts "result for b is #{b.result}"
-# puts "result for c is #{c.result}"
-# puts "result for d is #{d.result}"
-# puts "result for e is #{e.result}"
+a.runPrompt
+
+puts "result for a is #{a.result}"
+puts "result for b is #{b.result}"
+puts "result for c is #{c.result}"
+puts "result for d is #{d.result}"
+puts "result for e is #{e.result}"
 
 
 # foo = "-f> res {res + 1}"
@@ -543,11 +561,6 @@ c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
 #
 
 
-samples = [123,4,53,6,7,2,35,654] #,2,23]
-
-
-puts samples.sum() / samples.length
-puts samples.sum() >> 3
 
 
 
