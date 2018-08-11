@@ -367,6 +367,9 @@ class UserPrompter
     userInput.chomp!
     wasEmptyInput = userInput.empty?
 
+    # STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE
+
+
     if wasEmptyInput
       if @lastLambdaInput.nil?
         appendTextToLastUserInput(promptStr, @lastInput.to_s.green)

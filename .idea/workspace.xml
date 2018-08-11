@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -107,8 +106,8 @@
       <file leaf-file-name="rov_cmd_dev.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="415" column="70" selection-start-line="415" selection-start-column="70" selection-end-line="415" selection-end-column="70" />
+            <state relative-caret-position="165">
+              <caret line="369" column="103" selection-start-line="369" selection-start-column="103" selection-end-line="369" selection-end-column="103" />
             </state>
           </provider>
         </entry>
@@ -416,11 +415,12 @@
       <workItem from="1533194853726" duration="2723000" />
       <workItem from="1533226815212" duration="2000" />
       <workItem from="1533847999723" duration="1417000" />
+      <workItem from="1533940227231" duration="737000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="198463000" />
+    <option name="totallyTimeSpent" value="199200000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -435,17 +435,16 @@
     <frame x="55" y="25" width="1865" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2155496" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.29978356" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5008043" side_tool="true" weight="0.32910052" />
+      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919572" weight="0.29442692" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4841823" weight="0.35683298" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2155496" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="3" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.491689" visible="true" weight="0.36719576" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4841823" weight="0.35683298" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.35238096" />
       <window_info anchor="bottom" id="Code comment" order="11" />
@@ -455,6 +454,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.491689" visible="true" weight="0.36719576" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -686,8 +686,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="415" column="70" selection-start-line="415" selection-start-column="70" selection-end-line="415" selection-end-column="70" />
+        <state relative-caret-position="165">
+          <caret line="369" column="103" selection-start-line="369" selection-start-column="103" selection-end-line="369" selection-end-column="103" />
         </state>
       </provider>
     </entry>
