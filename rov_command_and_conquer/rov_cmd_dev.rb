@@ -1,100 +1,10 @@
 # Date 8-Jun-2017
 # Author Thor Mortensen, THM (THM@rovsing.dk)
 
-gem 'tty-cursor'
 require 'socket'
-require 'tty-cursor'
+require 'tty'
+require_relative '../user_prompter'
 
-#@formatter:off
-class String
-  def white;          "\e[30m#{self}\e[0m" end
-  def black;          "\e[30m#{self}\e[0m" end
-  def red;            "\e[31m#{self}\e[0m" end
-  def green;          "\e[32m#{self}\e[0m" end
-  def greenLight;     "\e[92m#{self}\e[0m" end
-  def brown;          "\e[33m#{self}\e[0m" end
-  def blue;           "\e[34m#{self}\e[0m" end
-  def magenta;        "\e[35m#{self}\e[0m" end
-  def cyan;           "\e[36m#{self}\e[0m" end
-  def gray;           "\e[37m#{self}\e[0m" end
-  def yellow;         "\e[43m#{self}\e[0m" end
-
-  def bg_black;       "\e[40m#{self}\e[0m" end
-  def bg_red;         "\e[41m#{self}\e[0m" end
-  def bg_green;       "\e[42m#{self}\e[0m" end
-  def bg_yell;        "\e[103m#{self}\e[0m"end
-  def bg_brown;       "\e[43m#{self}\e[0m" end
-  def bg_blue;        "\e[44m#{self}\e[0m" end
-  def bg_magenta;     "\e[45m#{self}\e[0m" end
-  def bg_cyan;        "\e[46m#{self}\e[0m" end
-  def bg_gray;        "\e[47m#{self}\e[0m" end
-
-  def bold;           "\e[1m#{self}\e[22m" end
-  def italic;         "\e[3m#{self}\e[23m" end
-  def underline;      "\e[4m#{self}\e[24m" end
-  def blink;          "\e[5m#{self}\e[25m" end
-  def reverse_color;  "\e[7m#{self}\e[27m" end
-
-  def is_integer?
-    self.to_i.to_s == self
-  end
-end
-#@formatter:on
-
-
-class UserPrompter
-
-  @@IntegerBetween
-
-  # @param [String] promptStr
-  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)},errorMsg = 'Must be a number', inputConverter_lambda = -> input {input.to_i}, nurseInput = false)
-    @promptStr = promptStr
-    @checkValidInput = acceptedInput_lambda
-    @cursor = TTY::Cursor
-    @errorMsg = errorMsg
-    @lastInput = nil
-    @inputConverter_lambda = inputConverter_lambda
-    @nurse = nurseInput
-  end
-
-  def nurseInput
-    if @nurse
-      @lastInput += 1 unless @lastInput.nil?
-    end
-  end
-
-  def prompt(promptStr = @promptStr)
-    while true
-      nurseInput()
-      print "#{promptStr}#{@lastInput.nil? ? '' : @lastInput.to_s.gray} "
-      print @cursor.backward(@lastInput.to_s.length + 1)
-      system("stty raw -echo") #=> Raw mode, no echo
-      userInput = STDIN.getc
-      system("stty -raw echo") #=> Reset terminal mode
-      if userInput == "q"
-        puts
-        return nil
-      elsif userInput != "\r"
-        print @cursor.clear_line_before
-        print userInput
-        userInput += STDIN.gets.chomp
-        if @checkValidInput.(userInput)
-          return @lastInput = @inputConverter_lambda.(userInput)
-        else
-          puts @errorMsg
-        end
-      else
-        puts @lastInput
-        return @lastInput
-      end
-    end
-  end
-
-  def clear
-    @lastInput = ''
-  end
-
-end
 
 
 class RawCmdConnection
@@ -115,16 +25,16 @@ class RawCmdConnection
   end
 
   def sendCmd(cmdId, arg1, arg2)
-    connect unless @isConnected
+    # connect unless @isConnected
     new_packet
     set_command_id cmdId
     set_packet_id 2
     set_sender_id 127
     set_arg1 arg1
     set_arg2 arg2
-    sendPackage
-    getRes
-    close # Close as we are very slow in man mode
+    # sendPackage
+    # getRes
+    # close # Close as we are very slow in man mode
   end
 
   def print_packege
@@ -136,16 +46,16 @@ class RawCmdConnection
         "No such device".red,
         "Device file error".red,
     ]
-    
+
     si = @res[4]
     pa = (@res[5] << 8 | @res[6])
     ci = @res[7]
     cs = @res[8]
     rv = (@res[9] << 24 | @res[10] << 16 | @res[11] << 8 | @res[12])
     ta = @res[13]
-    
+
     puts
-    puts "~~~~~~~~~~~~~~~~~~~~{ Package Returned }~~~~~~~~~~~~~~~~~~~~~~~".bg_blue
+    puts "~~~~~~~~~~~~~~~~~~~~{ Package Returned }~~~~~~~~~~~~~~~~~~~~~~~~".bg_blue
     puts "+----------------+------------+--------------------------------+"
     puts "| Package fields | Return val | Description                    |"
     puts "+----------------+------------+--------------------------------+"
@@ -241,9 +151,10 @@ class RawCmdConnection
 
 end
 
-##############################################
-#		              MAIN
-##############################################
+
+#############################################
+		              MAIN
+#############################################
 @mascIp = ARGV[0]
 ARGV.clear
 commandAndConquer = RawCmdConnection.new(@mascIp)
@@ -260,3 +171,61 @@ commandAndConquer.start
 # - Fix delete
 #  -clone if given as arg in constructer
 #
+
+
+
+
+# puts "starting.."
+# puts
+# puts
+
+#
+a  = UserPrompter.new(" asdasdasda ".bg_cyan)
+b  = UserPrompter.new(" b ".bg_cyan)
+c  = UserPrompter.new(" c ".bg_cyan)
+d  = UserPrompter.new(" d ".bg_cyan)
+e  = UserPrompter.new(" e ".bg_cyan)
+ca = UserPrompter.new("ca ".bg_cyan)
+cb = UserPrompter.new("cb ".bg_cyan)
+
+a >> b >> c #>> d >> a
+
+#c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
+
+a.runPrompt
+#
+
+# a.setDefault(1)
+# b.setDefault(2)
+# c.setDefault(3)
+#
+#
+# a.runPrompt
+
+
+# puts "result for a is #{a.result}"
+# puts "result for b is #{b.result}"
+# puts "result for c is #{c.result}"
+# puts "result for d is #{d.result}"
+# puts "result for e is #{e.result}"
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
