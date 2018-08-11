@@ -13,21 +13,27 @@ require_relative 'rubyHelpers.rb'
 
 class UserPrompter
 
-  attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda, :nextPrompt, :prevPrompt
+  attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda, :nextPrompt, :prevPrompt, :didBranch
 
 
   @controlKeys = {'r' => :autoRun, 'b' => :back, 'h' => :help, 'q' => :quit}
+  @@sigExitMsg = "Exiting."
+
+  def self.setSignalExitMsg (msg)
+    @@sigExitMsg = msg
+  end
 
 
   # @param [String] promptStr
   def initialize(promptStr, acceptedInput_lambda = -> input {input.is_integer?}, errorMsg = 'Must be (or produce) a number', inputConverter_lambda = -> input {input.to_i})
     @nextPrompt      = []
     @cursor          = TTY::Cursor
-    @reader          = TTY::Reader.new(interrupt: -> {puts "\nBye"; exit(1)})
+    @reader          = TTY::Reader.new(interrupt: -> {puts @@sigExitMsg; exit(1)})
     @branchCond      = -> res {false}
     @lastLambdaInput = nil
     @ppState         = :start
     @ppCaller        = :user
+    @didBranch       = false
 
 
     @promptStr = promptStr
@@ -129,6 +135,8 @@ class UserPrompter
 
   def pp(promptStr = @promptStr, trumpUserInput = nil)
 
+    @didBranch = false
+
     userInput = trumpUserInput.nil? ? @reader.read_line(getFormattedPromptStr(promptStr)) : trumpUserInput.to_s
     userInput.chomp!
     wasEmptyInput = userInput.empty?
@@ -146,6 +154,7 @@ class UserPrompter
 
     if @branchCond.call(userInput)
       @lastInput = userInput
+      @didBranch = true
     elsif (m = userInput.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/))
       return handleLambdaInput(m, wasEmptyInput) # Must return here else pp state is overwritten further down
     elsif @checkValidInput.(userInput)
@@ -183,12 +192,9 @@ class UserPrompter
     table << ['b', {value: 'Go back', alignment: :left}]
     table << ['↑', {value: 'History up (old values)', alignment: :left}]
     table << ['↓', {value: 'History down (newer values)', alignment: :left}]
-    navStr = table.render(:unicode)
-    puts
+    navStr = table.render(:unicode, alignment: [:center])
     puts "Navigation:".bold
-    puts
     puts navStr
-    puts
 
   end
 

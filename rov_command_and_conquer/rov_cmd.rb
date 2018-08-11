@@ -153,9 +153,9 @@ end
 ##############################################
 #		              MAIN
 ##############################################
-@mascIp = ARGV[0]
+@deviceIP = ARGV[0]
 ARGV.clear
-commandAndConquer = RawCmdConnection.new(@mascIp)
+commandAndConquer = RawCmdConnection.new(@deviceIP)
 commandAndConquer.start
 
 

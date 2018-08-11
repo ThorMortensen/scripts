@@ -376,7 +376,7 @@ end
 ##############################################
 #		Run
 ##############################################
-@mascIp = ARGV[0]
+@deviceIP = ARGV[0]
 ARGV.clear
-raw = RawMascCmdConnection.new(@mascIp)
+raw = RawMascCmdConnection.new(@deviceIP)
 raw.startManualMode

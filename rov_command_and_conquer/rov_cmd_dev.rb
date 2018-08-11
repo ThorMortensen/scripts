@@ -1,231 +1,161 @@
 # Date 8-Jun-2017
 # Author Thor Mortensen, THM (THM@rovsing.dk)
-
-require 'socket'
+#
 require 'tty'
 require_relative '../user_prompter'
+require_relative 'cmd_handler'
+require_relative 'rubyHelpers'
+
+startPrompter = TTY::Prompt.new(interrupt: :signal)
+pastel        = Pastel.new
+logoPrinter   = LogoPrinter.new
+@spinner      = TTY::Spinner.new("Sending package ".brown + ":spinner".blue, format: :arrow_pulse)
+$sigExitMsg   = "\nExiting. Use 'b' to go back (Noting was sent)"
 
 
+trap "SIGINT" do
+  puts $sigExitMsg
+  exit 130
+end
 
-class RawCmdConnection
+@betweenLambda   = -> input {input.is_integer? && input.to_i.between?(0, 255)}
+@betweenErrorMsg = "Must be (or produce) a number between 0 and 255".red
+UserPrompter.setSignalExitMsg($sigExitMsg)
 
-  def initialize(ipAddress = nil, port = 8888)
-    @ip = ipAddress
-    @port = port
-  end
+@cmdPrompt  = UserPrompter.new("Enter CMD  ".green, @betweenLambda, @betweenErrorMsg)
+@arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta)
+@arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan)
 
-  def connect
-    @socket = TCPSocket.open(@ip, @port)
-    @isConnected = true
-  end
-
-  def close
-    @isConnected = false
-    @socket.close
-  end
-
-  def sendCmd(cmdId, arg1, arg2)
-    # connect unless @isConnected
-    new_packet
-    set_command_id cmdId
-    set_packet_id 2
-    set_sender_id 127
-    set_arg1 arg1
-    set_arg2 arg2
-    # sendPackage
-    # getRes
-    # close # Close as we are very slow in man mode
-  end
-
-  def print_packege
-    errorDescription = [
-        "Successful completion".green,
-        "Unknown command".red,
-        "Argument 1 invalid".red,
-        "Argument 2 invalid".red,
-        "No such device".red,
-        "Device file error".red,
-    ]
-
-    si = @res[4]
-    pa = (@res[5] << 8 | @res[6])
-    ci = @res[7]
-    cs = @res[8]
-    rv = (@res[9] << 24 | @res[10] << 16 | @res[11] << 8 | @res[12])
-    ta = @res[13]
-
-    puts
-    puts "~~~~~~~~~~~~~~~~~~~~{ Package Returned }~~~~~~~~~~~~~~~~~~~~~~~~".bg_blue
-    puts "+----------------+------------+--------------------------------+"
-    puts "| Package fields | Return val | Description                    |"
-    puts "+----------------+------------+--------------------------------+"
-    puts "|  Sender ID     : #{si.to_s.center(10, ' ')} | Originator ID"
-    puts "|  Packet ID     : #{pa.to_s.center(10, ' ')} | Packet count, sender does ++"
-    puts "|  Cmd ID        : #{ci.to_s.center(10, ' ')} | Command number/ID sent"
-    puts "|  #{"Cmd status".bold}    : #{cs == 0 ? cs.to_s.center(10, ' ').green : cs.to_s.center(10, ' ').red} | #{errorDescription[cs] || "Undefined error".red}"
-    puts "|  #{"Return value".bold.blue}  : #{rv.to_s.center(10, ' ').bold.blue} | #{"Value returned".bold.blue}"
-    puts "|  Tag           : #{ta.to_s.center(10, ' ')} | Tag for each packets"
-    puts "+----------------+------------+--------------------------------+"
-    puts
-  end
-
-  def start
-
-    betweenLambda = -> input {input.is_integer? && input.to_i.between?(0, 255)}
-    betweenErrorMsg = "Must be between 0 and 255".red
-    cmdPrompt = UserPrompter.new("Enter CMD (number)".green + " ~> ", betweenLambda, betweenErrorMsg)
-    arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta + " ~> ", -> input {input.match(/\d/)}, 'Must be a number', -> input {input.to_i}, true)
-    arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan + " ~> ")
-    shmChmCmdPrompt = UserPrompter.new("Shm CMD ".bold + " ~> ", betweenLambda, betweenErrorMsg)
-    shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold + " ~> ", betweenLambda, betweenErrorMsg)
-    shmIndexCmdPrompt = UserPrompter.new("Shm index ".bold + " ~> ", betweenLambda, betweenErrorMsg)
-
-    while true
-      cmd = cmdPrompt.prompt
-      if cmd >= 160 && cmd <= 163
-        puts '--- Using shm cmd ---'
-        shmCmd = shmChmCmdPrompt.prompt
-        shmCmdEx = shmCmdExdCmdPrompt.prompt
-        shmIndex = shmIndexCmdPrompt.prompt
-        arg1 = shmCmd << 16 | shmCmdEx << 8 | shmIndex
-      else
-        arg1 = arg1Prompt.prompt
-      end
-      arg2 = arg2Prompt.prompt
-      sendCmd(cmd, arg1, arg2)
-      # packegeCount += 1
-      print_packege
-      # puts "Packages sendt -------> #{ packegeCount}"
-    end
-  end
-
-  private
-
-  def sendPackage
-    @socket.write(@data.map(&:to_i).pack('c*'))
-  end
-
-  def getRes
-    @res = @socket.readline.bytes.to_a
-  end
-
-  def new_packet
-    @data = Array.new(18)
-    @data[0] = 77 # 'M'
-    @data[1] = 65 # 'A'
-    @data[2] = 83 # 'S'
-    @data[3] = 67 # 'C'
-
-    @data[17] = 0x0A
-  end
-
-  def set_sender_id(sid)
-    @data[4] = sid
-  end
-
-  def set_packet_id(pid)
-    @data[5] = (pid >> 8) & 0xFF
-    @data[6] = (pid & 0xFF)
-  end
-
-  def set_command_id(cid)
-    @data[7] = cid
-  end
-
-  def set_arg1(val)
-    @data[8] = 1
-    @data[9] = (val >> 24) & 0xFF
-    @data[10] = (val >> 16) & 0xFF
-    @data[11] = (val >> 8) & 0xFF
-    @data[12] = (val & 0xFF)
-  end
-
-  def set_arg2(val)
-    @data[8] = 2
-    @data[13] = (val >> 24) & 0xFF
-    @data[14] = (val >> 16) & 0xFF
-    @data[15] = (val >> 8) & 0xFF
-    @data[16] = (val & 0xFF)
-  end
+# Setup the prompt order loop
+@cmdPrompt >> @arg1Prompt >> @arg2Prompt
+@cmdPrompt << @cmdPrompt # Tie up the back-loop so it doesn't crash when user goes back from fresh start
 
 
+def txCmd(cmdHandler, cmd, arg1, arg2)
+  puts
+  @spinner.auto_spin
+  cmdHandler.sendCmd(cmd, arg1, arg2)
+  @spinner.stop('done!'.bold.green)
+  cmdHandler.print_package
+end
+
+def printInputHelp
+  puts "Input:".bold     #
+  puts "  Enter command (cmd) number and argument (arg) value when prompted or\n"
+  puts "  you can enter a lambda as input to automate the input value.       \n"
+  puts "  The lambda input will receive the last input result as a parameter.\n"
+  puts "  Lambda input examples:                                             \n"
+  puts "                                                                     \n"
+  puts "    - To increment input by 1                                          ".bold
+  puts "        -> res {res + 1}                                              ".blue
+  puts "    - To make one-hot (bit) encoding input                             ".bold
+  puts "        1 -> res {res + res}                                          ".blue
+  puts "                                                                     \n"
+  puts "  A number before the arrow will be used as initial input to lambda. \n"
+  puts "  If no number is given, the last input will be used.                \n"
+  puts
 end
 
 
-#############################################
-		              MAIN
-#############################################
-@mascIp = ARGV[0]
+
+def runMasc(cmdHandler)
+
+  printInputHelp
+
+  # Extra prompt for MASC shm
+  shmChmCmdPrompt    = UserPrompter.new("Shm CMD    ".bold, @cmdPrompt)
+  shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold, @cmdPrompt)
+  shmIndexCmdPrompt  = UserPrompter.new("Shm index  ".bold, @cmdPrompt)
+
+  # Connecting extra prompts to main prompt loop
+  @cmdPrompt >> {-> cmd {cmd.to_i.between? 160, 163} => shmChmCmdPrompt >> shmCmdExdCmdPrompt >> shmIndexCmdPrompt >> @arg2Prompt}
+
+  while true
+    @cmdPrompt.runPrompt
+
+    cmd = @cmdPrompt.result
+    if @cmdPrompt.didBranch
+      shmCmd   = shmChmCmdPrompt.result
+      shmCmdEx = shmCmdExdCmdPrompt.result
+      shmIndex = shmIndexCmdPrompt.result
+      arg1     = shmCmd << 16 | shmCmdEx << 8 | shmIndex
+    else
+      arg1 = @arg1Prompt.result
+    end
+    arg2 = @arg2Prompt.result
+
+    txCmd(cmdHandler, cmd, arg1, arg2)
+  end
+end
+
+def runSlp(cmdHandler)
+
+  printInputHelp
+
+  while true
+    @cmdPrompt.runPrompt
+
+    cmd  = @cmdPrompt.result
+    arg1 = @arg1Prompt.result
+    arg2 = @arg2Prompt.result
+
+    txCmd(cmdHandler, cmd, arg1, arg2)
+
+  end
+end
+
+
+############################################
+# MAIN
+############################################
+@deviceIP = ARGV[0]
+@deviceIP = "127.0.0.1"
 ARGV.clear
-commandAndConquer = RawCmdConnection.new(@mascIp)
-commandAndConquer.start
+
+logoPrinter.paintRovLogo(pastel.yellow("Command\n&\nConquer\n".bold) + "\n (SLP and MASC)".bold)
+puts
+
+device = startPrompter.select("Select device", %w(MASC SLP))
+
+if @deviceIP.nil?
+  case device
+    when "MASC"
+      defaultIp = "192.168.52.xx"
+    when "SLP"
+      defaultIp = "192.168.51.xx"
+  end
+  ipRegEx   = /(\d{1,3}|\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b)/
+
+  startPrompter.ask("What's the #{device} ip?", default: defaultIp) do |q|
+    q.required(true)
+    q.validate(ipRegEx, "Not a valid IP address")
+  end
+end
 
 
-#
+cmdHandler = CmdHandler.new(@deviceIP)
+puts "~~~~~~~~~~~~{ How to use this program }~~~~~~~~~~~~".bg_blue
+
+UserPrompter.printHelp
+
+case device
+  when "MASC"
+    runMasc(cmdHandler)
+  when "SLP"
+    runSlp(cmdHandler)
+end
+
+
 # Things to add
-# - Main meny
-# - Help section
-# - Back
-# - history
-# - accept math function
-# - Fix delete
-#  -clone if given as arg in constructer
+# - Main meny                             - OK
+# - Package tabel + resqueb                - (-_-)
+# - Help section                          - semmi OK
+# - Back                                  - OK
+# - history                               - OK
+# - accept math function                  - OK
+# - Fix delete                            - OK
+#  -clone if given as arg in constructer  - OK
 #
-
-
-
-
-# puts "starting.."
-# puts
-# puts
-
-#
-a  = UserPrompter.new(" asdasdasda ".bg_cyan)
-b  = UserPrompter.new(" b ".bg_cyan)
-c  = UserPrompter.new(" c ".bg_cyan)
-d  = UserPrompter.new(" d ".bg_cyan)
-e  = UserPrompter.new(" e ".bg_cyan)
-ca = UserPrompter.new("ca ".bg_cyan)
-cb = UserPrompter.new("cb ".bg_cyan)
-
-a >> b >> c #>> d >> a
-
-#c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
-
-a.runPrompt
-#
-
-# a.setDefault(1)
-# b.setDefault(2)
-# c.setDefault(3)
-#
-#
-# a.runPrompt
-
-
-# puts "result for a is #{a.result}"
-# puts "result for b is #{b.result}"
-# puts "result for c is #{c.result}"
-# puts "result for d is #{d.result}"
-# puts "result for e is #{e.result}"
-#
-#
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
