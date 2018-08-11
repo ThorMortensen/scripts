@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rov_cmd_dev.rb" beforeDir="false" afterPath="$PROJECT_DIR$/rov_cmd_dev.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,7 +19,7 @@
     </option>
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1533208411166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
+    <SUITE FILE_PATH="coverage/scripts@rov_cmd_dev.rcov" NAME="rov_cmd_dev Coverage Results" MODIFIED="1533995209354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@testScript.coverage" NAME="testScript Coverage Results" MODIFIED="1511350865262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
     <SUITE FILE_PATH="coverage/scripts@rov_cmd.rcov" NAME="rov_cmd Coverage Results" MODIFIED="1530087849311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="scripts" />
   </component>
@@ -106,8 +107,20 @@
       <file leaf-file-name="rov_cmd_dev.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="369" column="103" selection-start-line="369" selection-start-column="103" selection-end-line="369" selection-end-column="103" />
+            <state relative-caret-position="-757">
+              <caret line="453" column="2" lean-forward="true" selection-start-line="453" selection-start-column="2" selection-end-line="453" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="357">
+                <caret line="21" selection-start-line="21" selection-end-line="21" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -133,8 +146,8 @@
       <file leaf-file-name="reader.rb" pinned="false" current-in-tab="false">
         <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3281">
-              <caret line="193" selection-start-line="193" selection-end-line="193" />
+            <state relative-caret-position="390">
+              <caret line="197" selection-start-line="197" selection-end-line="197" />
             </state>
           </provider>
         </entry>
@@ -180,6 +193,7 @@
       <find>conditionalLambda</find>
       <find>@cursor</find>
       <find>default</find>
+      <find>errorMsg</find>
     </findStrings>
     <replaceStrings>
       <replace>SCRIPTS_FOLDER_PATH</replace>
@@ -238,10 +252,10 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="180" />
-    <option name="y" value="241" />
-    <option name="width" value="1840" />
-    <option name="height" value="789" />
+    <option name="x" value="55" />
+    <option name="y" value="25" />
+    <option name="width" value="933" />
+    <option name="height" value="1055" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -416,11 +430,12 @@
       <workItem from="1533226815212" duration="2000" />
       <workItem from="1533847999723" duration="1417000" />
       <workItem from="1533940227231" duration="737000" />
+      <workItem from="1533980764844" duration="13072000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="199200000" />
+    <option name="totallyTimeSpent" value="212272000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -435,18 +450,18 @@
     <frame x="55" y="25" width="1865" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2155496" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18820375" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.29978356" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5008043" side_tool="true" weight="0.32910052" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919572" weight="0.29442692" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919572" weight="0.2941799" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4841823" weight="0.35683298" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.35238096" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.22116402" />
       <window_info anchor="bottom" id="Code comment" order="11" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -464,6 +479,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="4" />
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="RubyRunConfigurationType">
         <watch expression="@@backStackIndexer" />
@@ -515,16 +533,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/install.rb" />
     <entry file="file://$PROJECT_DIR$/install.sh" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="378">
-            <caret line="21" selection-start-line="21" selection-end-line="21" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testScript.rb" />
     <entry file="file://$PROJECT_DIR$/+sshrov" />
     <entry file="file:///usr/lib/ruby/2.3.0/yaml.rb" />
@@ -663,13 +671,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3281">
-          <caret line="193" selection-start-line="193" selection-end-line="193" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/rubystubs25/open_ssl.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="101439">
@@ -684,10 +685,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///var/lib/gems/2.5.0/gems/tty-reader-0.3.0/lib/tty/reader.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="197" selection-start-line="197" selection-end-line="197" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="357">
+            <caret line="21" selection-start-line="21" selection-end-line="21" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rov_cmd_dev.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="369" column="103" selection-start-line="369" selection-start-column="103" selection-end-line="369" selection-end-column="103" />
+        <state relative-caret-position="-757">
+          <caret line="453" column="2" lean-forward="true" selection-start-line="453" selection-start-column="2" selection-end-line="453" selection-end-column="2" />
         </state>
       </provider>
     </entry>

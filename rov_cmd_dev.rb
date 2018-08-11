@@ -297,16 +297,19 @@ class UserPrompter
   attr_reader :promptStr, :checkValidInput, :errorMsg, :inputConverter_lambda, :nextPrompt, :prevPrompt
 
 
-  @controlKeys = {'b' => :back, 'h' => :help, 'q' => :quit}
+  @controlKeys = {'r' => :autoRun, 'b' => :back, 'h' => :help, 'q' => :quit}
 
 
   # @param [String] promptStr
-  def initialize(promptStr, acceptedInput_lambda = -> input {input.match(/\d/)}, errorMsg = 'Must be (or produce) a number', inputConverter_lambda = -> input {input.to_i})
+  def initialize(promptStr, acceptedInput_lambda = -> input {input.is_integer?}, errorMsg = 'Must be (or produce) a number', inputConverter_lambda = -> input {input.to_i})
     @nextPrompt      = []
     @cursor          = TTY::Cursor
     @reader          = TTY::Reader.new(interrupt: -> {puts "\nBye"; exit(1)})
     @branchCond      = -> res {false}
     @lastLambdaInput = nil
+    @ppState         = :start
+    @ppCaller        = :user
+
 
     @promptStr = promptStr
     if acceptedInput_lambda.is_a?(UserPrompter) # Clone rest of the parameters from any incoming objects of the same type
@@ -331,28 +334,11 @@ class UserPrompter
 
   def getFormattedPromptStr(promptStr)
     "#{promptStr}#{
-    if @lastInput.nil? and @lastLambdaInput.nil?
-      ''
-    else
-      '(' + ((@lastLambdaInput.nil? ? '' : @lastLambdaInput.to_s + " = ") + @lastInput.to_s).gray.dim + ')'
-    end} ~> "
+    (@lastInput.nil? and @lastLambdaInput.nil?) ?
+        '' :
+        '(' + (((@ppCaller == :lambda or @ppState == :lastWasLambdaInput) ? @lastLambdaInput.to_s + " = " : '') + @lastInput.to_s).gray.dim + ')'} ~> "
   end
 
-  def evaluateUserLambdaInput(userInput)
-    userLambdaRes = nil
-    runOk = true
-    begin
-      userLambdaRes = eval(userInput).call(@lastInput)
-      userLambdaRes
-    rescue SyntaxError, NameError => boom
-      puts "Input lambda doesn't compile: " + boom.to_s
-      runOk = false
-    rescue StandardError => bang
-      puts "Error running input lambda: " + bang.to_s
-      runOk = false
-    end
-    return runOk , userLambdaRes
-  end
 
   def appendTextToLastUserInput(offsetOrPromptStr, strToAppend)
     endOfPrevLine = offsetOrPromptStr.is_a?(Integer) ? offsetOrPromptStr : getFormattedPromptStr(offsetOrPromptStr).clearColor.length
@@ -361,101 +347,114 @@ class UserPrompter
     print @cursor.next_line
   end
 
+  def handleLambdaInput(m, wasEmptyInput)
+    lambdaHelpStr    = "Please start with number I.e 42 -> r {r + 1}"
+    lastPromptStrLen = getFormattedPromptStr(promptStr).clearColor.length
+    @ppCaller        = :lambda
+
+
+    case @ppState
+      when :start
+        if m[1].empty? and @lastInput.nil?
+          puts "Missing input to lambda." + lambdaHelpStr
+          @ppCaller = :user
+          return false
+        end
+      when :lastWasLambdaInput
+        if m[1].empty?
+          puts "Can't use nested lambdas. " + lambdaHelpStr
+          return false
+        end
+    end
+
+    unless m[1].empty?
+      pp(promptStr, m[1])
+    end
+
+    lambdaResult = nil
+
+    begin
+      lambdaResult = eval(m[2]).call(@lastInput)
+    rescue SyntaxError, NameError => boom
+      puts "Input lambda doesn't compile: \n" + boom.to_s
+      @ppCaller = :user
+      return false
+    rescue StandardError => bang
+      puts "Error running input lambda: \n" + bang.to_s
+      @ppCaller = :user
+      return false
+    end
+
+    if pp(promptStr, lambdaResult)
+      @lastLambdaInput = m[2]
+      case @ppState
+        when :start
+          appendTextToLastUserInput(lastPromptStrLen + m[0].length, " = " + result.to_s.green)
+        when :lastWasLambdaInput
+          if m[1].empty?
+            appendTextToLastUserInput(promptStr, (wasEmptyInput ? '' : ' = ') + result.to_s.green)
+          else
+            appendTextToLastUserInput(lastPromptStrLen + m[0].length, " = " + result.to_s.green)
+          end
+        when :auto
+          appendTextToLastUserInput(promptStr, (wasEmptyInput ? '' : ' = ') + result.to_s.green)
+      end
+    else
+      return false
+    end
+    @ppState  = :lastWasLambdaInput
+    @ppCaller = :user
+    return true
+
+  end
+
   def pp(promptStr = @promptStr, trumpUserInput = nil)
 
     userInput = trumpUserInput.nil? ? @reader.read_line(getFormattedPromptStr(promptStr)) : trumpUserInput.to_s
     userInput.chomp!
     wasEmptyInput = userInput.empty?
-
-    # STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE STATE MACHINE
-
+    wasOk         = true
 
     if wasEmptyInput
-      if @lastLambdaInput.nil?
+      if @ppState == :lastWasLambdaInput
+        userInput = @lastLambdaInput
+      else
         appendTextToLastUserInput(promptStr, @lastInput.to_s.green)
         userInput = @lastInput.to_s
-      else
-        userInput = @lastLambdaInput
       end
+      @ppState = :auto
     end
 
     if @branchCond.call(userInput)
       @lastInput = userInput
-      true
     elsif (m = userInput.match(/(\d*)(\s?lambda\s?{.*}\s|\s?->.*{.*})/))
-
-      lambdaHelpStr = "Please start with number I.e 42 -> r {r + 1}"
-
-      lastPromptStrLen = getFormattedPromptStr(promptStr).clearColor.length
-
-      if m[1].empty?
-        unless @lastLambdaInput.nil?
-          puts "Can't use nested lambdas. " + lambdaHelpStr
-          return false
-        end
-      else
-        pp(promptStr, m[1])
-      end
-
-      if @lastInput.nil?
-        puts "Missing input to lambda." + lambdaHelpStr
-        return false
-      end
-
-      lastLambdaInputTemp = @lastLambdaInput # Take a copy before set to new val. Needed to see if this was a new lambda or recall
-
-
-      @lastLambdaInput = m[2] # Need to set this for nex recursive call to pp
-
-      runOk , res = evaluateUserLambdaInput(m[2])
-
-      unless runOk
-        @lastLambdaInput = nil
-        return false
-      end
-
-      if pp(promptStr,res )
-        if lastLambdaInputTemp.nil?
-          appendTextToLastUserInput(lastPromptStrLen + m[0].length + 1, " = " + result.to_s.green)
-        else
-          @lastLambdaInput = m[2]
-          appendTextToLastUserInput(promptStr, (wasEmptyInput ? '' : ' = ') + result.to_s.green)
-        end
-      else
-        @lastLambdaInput = nil
-        return false
-      end
-      @lastLambdaInput = m[2]
-      true
-
+      return handleLambdaInput(m, wasEmptyInput) # Must return here else pp state is overwritten further down
     elsif @checkValidInput.(userInput)
-      @lastInput       = @inputConverter_lambda.(userInput)
-      @lastLambdaInput = nil
-      true
-
+      @lastInput = @inputConverter_lambda.(userInput)
     elsif userInput == "b"
-      :back
+      wasOk = :back
+    elsif userInput == "r"
+      wasOk = :autoRun
     else
       puts @errorMsg
+      wasOk = false
     end
 
+    if @ppCaller == :user
+      @ppState = :start
+    end
+
+    return wasOk
 
   end
 
-
-  # def pp(foo)
-  #   # puts @promptStr
-  #   input = @reader.read_line("#{promptStr}#{@lastInput.nil? ? '' : '(' + @lastInput.to_s.gray + ')'} ~> ").chomp!
-  #   print input
-  #   # input = STDIN.gets.chomp
-  #   if input == "b"
-  #     puts "hello"
-  #     :back
-  #   else
-  #     @lastInput = input
-  #     true
-  #   end
-  # end
+  def autoRun
+    pp(trumpUserInput=@lastInput)
+  end
+  
+  def setDefault(defaultValue)
+    @lastInput = defaultValue
+  end
 
   def runPrompt
     promptToRun = self
@@ -474,6 +473,8 @@ class UserPrompter
             end
           end
         when :back
+          promptToRun = promptToRun.prevPrompt
+        when :autoRun
           promptToRun = promptToRun.prevPrompt
       end
     end
@@ -538,7 +539,7 @@ e  = UserPrompter.new(" e ".bg_cyan)
 ca = UserPrompter.new("ca ".bg_cyan)
 cb = UserPrompter.new("cb ".bg_cyan)
 
-a >> b >> c >> d >> e
+a >> b >> c >> d >> a
 
 c >> {-> res {res.to_i.between? 160, 170} => ca >> cb >> d}
 
