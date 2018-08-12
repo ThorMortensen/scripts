@@ -6,12 +6,12 @@ require_relative '../user_prompter'
 require_relative 'cmd_handler'
 require_relative 'rubyHelpers'
 
-startPrompter = TTY::Prompt.new(interrupt: :signal)
-pastel        = Pastel.new
-logoPrinter   = LogoPrinter.new
-@spinner      = TTY::Spinner.new("Sending package ".brown + ":spinner".blue, format: :arrow_pulse)
-$sigExitMsg   = "\nExiting. Use 'b' to go back (Noting was sent)"
-
+pastel          = Pastel.new
+logoPrinter     = LogoPrinter.new
+@spinner        = TTY::Spinner.new("Sending package ".brown + ":spinner".blue, format: :arrow_pulse)
+@simplePrompter = TTY::Prompt.new(interrupt: :signal)
+$sigExitMsg     = "\nExiting. Use 'b' to go back (Noting was sent)"
+@initDone       = false
 
 trap "SIGINT" do
   puts $sigExitMsg
@@ -30,17 +30,78 @@ UserPrompter.setSignalExitMsg($sigExitMsg)
 @cmdPrompt >> @arg1Prompt >> @arg2Prompt
 @cmdPrompt << @cmdPrompt # Tie up the back-loop so it doesn't crash when user goes back from fresh start
 
+def startPrompt
+
+  device = @simplePrompter.select("Select device:", %w(MASC SLP))
+
+  if @deviceIP.nil? or @initDone
+    case device
+      when "MASC"
+        defaultIp = "192.168.52."
+      when "SLP"
+        defaultIp = "192.168.51."
+    end
+
+    while true
+      @deviceIP = @simplePrompter.ask("What's the #{device} ip?", default: defaultIp + "xx") do |q|
+        q.required(true)
+        q.validate(/(\d{1,3}|\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b)/, "Not a valid IP address")
+      end
+      if @deviceIP == defaultIp + "xx"
+        puts "Not a valid IP address".red
+        next
+      end
+      unless @deviceIP.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/)
+        @deviceIP = defaultIp + @deviceIP
+        puts "Device IP: " + @deviceIP.green
+
+      end
+      break
+    end
+
+  end
+
+  cmdHandler = CmdHandler.new(@deviceIP)
+
+  unless @initDone
+    puts "~~~~~~~~~~~~{ How to use this script }~~~~~~~~~~~~".bg_blue.bold
+    UserPrompter.printHelp
+  end
+
+  case device
+    when "MASC"
+      runMasc(cmdHandler)
+    when "SLP"
+      runSlp(cmdHandler)
+  end
+
+  @initDone = true
+
+end
+
 
 def txCmd(cmdHandler, cmd, arg1, arg2)
   puts
   @spinner.auto_spin
-  cmdHandler.sendCmd(cmd, arg1, arg2)
-  @spinner.stop('done!'.bold.green)
+
+  begin
+    cmdHandler.sendCmd(cmd, arg1, arg2)
+  rescue => e
+    @spinner.stop(e.to_s.bold.red)
+    answ = !@simplePrompter.yes?("Something went wrong with the network. Select new IP?")
+    if answ == true
+      return false
+    end
+    return false
+  end
+
+  @spinner.stop('done!'.bold.red)
   cmdHandler.print_package
+  return true
 end
 
 def printInputHelp
-  puts "Input:".bold     #
+  puts "Input:".bold #
   puts "  Enter command (cmd) number and argument (arg) value when prompted or\n"
   puts "  you can enter a lambda as input to automate the input value.       \n"
   puts "  The lambda input will receive the last input result as a parameter.\n"
@@ -55,7 +116,6 @@ def printInputHelp
   puts "  If no number is given, the last input will be used.                \n"
   puts
 end
-
 
 
 def runMasc(cmdHandler)
@@ -84,7 +144,7 @@ def runMasc(cmdHandler)
     end
     arg2 = @arg2Prompt.result
 
-    txCmd(cmdHandler, cmd, arg1, arg2)
+    return unless txCmd(cmdHandler, cmd, arg1, arg2)
   end
 end
 
@@ -99,8 +159,7 @@ def runSlp(cmdHandler)
     arg1 = @arg1Prompt.result
     arg2 = @arg2Prompt.result
 
-    txCmd(cmdHandler, cmd, arg1, arg2)
-
+    return unless txCmd(cmdHandler, cmd, arg1, arg2)
   end
 end
 
@@ -109,47 +168,20 @@ end
 # MAIN
 ############################################
 @deviceIP = ARGV[0]
-@deviceIP = "127.0.0.1"
+# @deviceIP = "127.0.0.1"
 ARGV.clear
 
 logoPrinter.paintRovLogo(pastel.yellow("Command\n&\nConquer\n".bold) + "\n (SLP and MASC)".bold)
 puts
 
-device = startPrompter.select("Select device", %w(MASC SLP))
-
-if @deviceIP.nil?
-  case device
-    when "MASC"
-      defaultIp = "192.168.52.xx"
-    when "SLP"
-      defaultIp = "192.168.51.xx"
-  end
-  ipRegEx   = /(\d{1,3}|\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b)/
-
-  startPrompter.ask("What's the #{device} ip?", default: defaultIp) do |q|
-    q.required(true)
-    q.validate(ipRegEx, "Not a valid IP address")
-  end
+while true
+  startPrompt
 end
-
-
-cmdHandler = CmdHandler.new(@deviceIP)
-puts "~~~~~~~~~~~~{ How to use this program }~~~~~~~~~~~~".bg_blue
-
-UserPrompter.printHelp
-
-case device
-  when "MASC"
-    runMasc(cmdHandler)
-  when "SLP"
-    runSlp(cmdHandler)
-end
-
 
 # Things to add
 # - Main meny                             - OK
-# - Package tabel + resqueb                - (-_-)
-# - Help section                          - semmi OK
+# - Package tabel + resqueb               - OK
+# - Help section                          - semi OK
 # - Back                                  - OK
 # - history                               - OK
 # - accept math function                  - OK

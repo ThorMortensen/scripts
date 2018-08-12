@@ -188,7 +188,7 @@ class UserPrompter
 
   def self.printHelp
     table = TTY::Table.new header: ['Input', 'Description'], alignment: [:center]
-    table << ['h', {value: 'This help', alignment: :left}]
+    table << ['h', {value: 'This help box', alignment: :left}]
     table << ['b', {value: 'Go back', alignment: :left}]
     table << ['↑', {value: 'History up (old values)', alignment: :left}]
     table << ['↓', {value: 'History down (newer values)', alignment: :left}]
