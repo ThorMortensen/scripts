@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+
+sudo apt -y install build-essential git ruby sshfs ruby-dev zsh nmap net-tools
+
+sudo gem install rake
+sudo gem install bundler
+bundler install
+
+# #### Install Oh my ZSH
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+chsh -s $(which zsh)
+# # Log in and out
+
+sed -e '/ZSH_THEME=/s/^/#/g' -i ~/.zshrc
+sed -e '/plugins=(/s/^/#/g' -i ~/.zshrc
+sed -e '/  git/s/^/#/g' -i ~/.zshrc
+sed -e '/)/s/^/#/g' -i ~/.zshrc
+sed -e '/source $ZSH\/oh-my-zsh.sh/s/^/#/g' -i ~/.zshrc
+
+echo "####### To source QOL scripts ######" >> ~/.zshrc
+echo "source ~/scripts/zshrc_stuff" >> ~/.zshrc
+echo "source \$ZSH/oh-my-zsh.sh" >> ~/.zshrc
+
+# Add bash rc stuff
+echo "source ~/scripts/bashrc_stuff" >> ~/.bashrc
+
+# Add common rc for both bash and zsh
+echo "source ~/.common_rc" >> ~/.zshrc
+echo "source ~/.common_rc" >> ~/.bashrc
+
+# Add stuff for common
+echo "PATH=\$PATH:~/scripts/" >> ~/.common_rc
+echo "export JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> ~/.common_rc
+
+
