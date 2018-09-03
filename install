@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 
+./+update
+
 sudo apt -y install build-essential git ruby sshfs ruby-dev zsh nmap net-tools
+
 
 sudo gem install rake
 sudo gem install bundler
