@@ -4,6 +4,7 @@ AUTO_COMMIT_PATHS:
 - "~/Documents/PlatformIO/Projects/door_opener"
 - "~/scripts"
 - "~/zynq_migration"
+- "~/simpleProfile"
 AUTO_ADD_PATHS:
 - "~/install_script"
 - "~/Documents/PlatformIO/Projects/door_opener"
