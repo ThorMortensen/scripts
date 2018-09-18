@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 
+./+update
+
 sudo apt -y install build-essential git ruby sshfs ruby-dev zsh nmap net-tools
+
 
 sudo gem install rake
 sudo gem install bundler
@@ -9,7 +12,7 @@ bundler install
 
 # #### Install Oh my ZSH
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
 chsh -s $(which zsh)
 # # Log in and out

@@ -1,7 +1,10 @@
 #!/bin/bash
 
-if [[ nmap -sP $1 ]]; then
-  #statementsels
-else
+ruby -W0 netScanner.rb $1
+
+
+# if [[ nmap -sP $1 ]]; then
+#   #statementsels
+# else
   
-fi
+# fi
