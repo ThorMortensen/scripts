@@ -3,14 +3,10 @@ AUTO_COMMIT_PATHS:
 - "~/install_script"
 - "~/Documents/PlatformIO/Projects/door_opener"
 - "~/scripts"
-<<<<<<< HEAD
-# - "~/zynq_migration"
-=======
 - "~/zynq_migration"
 - "~/simpleProfile"
->>>>>>> 8cfcdbb3a8feb5f10a72ca1770f1c9afe85c0b3d
 AUTO_ADD_PATHS:
 - "~/install_script"
 - "~/Documents/PlatformIO/Projects/door_opener"
 - "~/scripts"
-# - "~/zynq_migration"
+- "~/zynq_migration"

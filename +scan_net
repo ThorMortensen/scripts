@@ -1,5 +1,9 @@
 #!/bin/bash
 
+. globals
+
+cd $SCRIPTS_DIR
+
 ruby -W0 netScanner.rb $1
 
 
