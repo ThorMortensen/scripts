@@ -8,7 +8,7 @@ require_relative 'rubyHelpers.rb'
 
 @addr_infos = Socket.ip_address_list
 
-
+@ipRegex = /(\d{1,3}\.\d{1,3}\.\d{1,3}\.)\d{1,3}/
 
 # diff = Differ.diff "foo", "boo"
 
@@ -22,10 +22,31 @@ def scanIp(ipAddress)
   @spinner.auto_spin
   out, err = @cmd.run("nmap -sP #{ipAddress}/24")
   @spinner.stop('Done!'.green)
-  puts out
+  ipUp = out.scan(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)
+  latency = out.scan(/\(.* latency\)/)
+  thisFileName = ".fileDump/ipRange#{ipAddress}"
+  oldIpUp = IO.readlines(thisFileName);
+
+  oldIpUp.map {|x| x.chomp! }
+
+  ipUp.each_with_index do | ip, i |
+    newIp = ip.delete('.').to_i
+    oldIp =  oldIpUp.nil? ? newIp : oldIpUp[i].delete('.').to_i
+    if newIp == oldIp
+      puts "Host is up #{ip} #{latency[i]}"
+    end 
+  end 
+
+  File.open(thisFileName, "w+") do |dumpFile|
+    dumpFile.puts(ipUp)
+  end
+  # puts out
 
 end 
 
+
+
+Dir.mkdir(".fileDump") unless File.exists?(".fileDump")
 
 
 if ARGV[1].nil?
