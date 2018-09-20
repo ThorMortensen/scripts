@@ -19,13 +19,21 @@ trap "SIGINT" do
 end
 
 @betweenLambda   = -> input {input.is_integer? && input.to_i.between?(0, 255)}
+@eatHexLambda    = -> input {input.is_hex? or input.is_integer?}
+@convHexLambda    = -> input {
+ if input.is_hex? 
+  input.match(/0x([a-fA-F0-9]+)/)[1].to_i(16)
+ else 
+  input.to_i
+ end 
+}
 @betweenErrorMsg = "Must be (or produce) a number between 0 and 255".red
 UserPrompter.setSignalExitMsg($sigExitMsg)
 @connectionFuckUpDefaultAnsw = true
 
 @cmdPrompt  = UserPrompter.new("Enter CMD  ".green, @betweenLambda, @betweenErrorMsg)
-@arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta)
-@arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan)
+@arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta, @eatHexLambda)
+@arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan, @eatHexLambda)
 
 # Setup the prompt order loop
 @cmdPrompt >> @arg1Prompt >> @arg2Prompt
@@ -129,9 +137,9 @@ def runMasc(cmdHandler)
   printInputHelp
 
   # Extra prompt for MASC shm
-  shmChmCmdPrompt    = UserPrompter.new("Shm CMD    ".bold, @cmdPrompt)
-  shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold, @cmdPrompt)
-  shmIndexCmdPrompt  = UserPrompter.new("Shm index  ".bold, @cmdPrompt)
+  shmChmCmdPrompt    = UserPrompter.new("Shm CMD    ".bold, @cmdPrompt, @eatHexLambda)
+  shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold, @cmdPrompt, @eatHexLambda)
+  shmIndexCmdPrompt  = UserPrompter.new("Shm index  ".bold, @cmdPrompt, @eatHexLambda)
 
   # Connecting extra prompts to main prompt loop
   @cmdPrompt >> {-> cmd {cmd.to_i.between? 160, 163} => shmChmCmdPrompt >> shmCmdExdCmdPrompt >> shmIndexCmdPrompt >> @arg2Prompt}

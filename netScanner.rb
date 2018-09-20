@@ -1,6 +1,5 @@
 require 'tty'
 require 'socket'
-require 'differ'
 require_relative 'rubyHelpers.rb'
 
 
@@ -25,16 +24,18 @@ def scanIp(ipAddress)
   ipUp = out.scan(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)
   latency = out.scan(/\(.* latency\)/)
   thisFileName = ".fileDump/ipRange#{ipAddress}"
-  oldIpUp = IO.readlines(thisFileName);
+  # oldIpUp = IO.readlines(thisFileName);
 
-  oldIpUp.map {|x| x.chomp! }
+  # oldIpUp.map {|x| x.chomp! }
 
   ipUp.each_with_index do | ip, i |
-    newIp = ip.delete('.').to_i
-    oldIp =  oldIpUp.nil? ? newIp : oldIpUp[i].delete('.').to_i
-    if newIp == oldIp
+    # newIp = ip.delete('.').to_i
+    # oldIp =  oldIpUp.nil? ? newIp : oldIpUp[i].delete('.').to_i
+    # if newIp == oldIp
+    #   puts "Host is up #{ip} #{latency[i]}"
+    # end 
       puts "Host is up #{ip} #{latency[i]}"
-    end 
+    
   end 
 
   File.open(thisFileName, "w+") do |dumpFile|

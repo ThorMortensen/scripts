@@ -105,7 +105,11 @@ class String
 
   def is_integer?
     self.to_i.to_s == self
-  end
+  end 
+
+  def is_hex?
+    self.match(/0x([a-fA-F0-9]+)/)
+  end 
 end
 #@formatter:on
 
