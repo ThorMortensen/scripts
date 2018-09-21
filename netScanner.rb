@@ -31,7 +31,7 @@ def scanIp(ipAddress)
 
   ipUp.each_with_index do | ip, i |
     newIp = ip.delete('.').to_i
-    oldIp =  oldIpUp.nil? ? newIp : oldIpUp[i].delete('.').to_i
+    oldIp =  newIp #oldIpUp.nil? ? newIp : oldIpUp[i].delete('.').to_i
     if newIp == oldIp
       puts "Host is up #{ip} #{latency[i]}"
     end 
