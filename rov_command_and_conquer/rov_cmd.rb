@@ -27,13 +27,14 @@ end
   input.to_i
  end 
 }
+@defaultErrorMsg = 'Must be (or produce) a number'
 @betweenErrorMsg = "Must be (or produce) a number between 0 and 255".red
 UserPrompter.setSignalExitMsg($sigExitMsg)
 @connectionFuckUpDefaultAnsw = true
 
 @cmdPrompt  = UserPrompter.new("Enter CMD  ".green, @betweenLambda, @betweenErrorMsg)
-@arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta, @eatHexLambda)
-@arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan, @eatHexLambda)
+@arg1Prompt = UserPrompter.new("Enter Arg1 ".magenta, @eatHexLambda , @defaultErrorMsg, @convHexLambda)
+@arg2Prompt = UserPrompter.new("Enter Arg2 ".cyan, @arg1Prompt)
 
 # Setup the prompt order loop
 @cmdPrompt >> @arg1Prompt >> @arg2Prompt
@@ -137,9 +138,9 @@ def runMasc(cmdHandler)
   printInputHelp
 
   # Extra prompt for MASC shm
-  shmChmCmdPrompt    = UserPrompter.new("Shm CMD    ".bold, @cmdPrompt, @eatHexLambda)
-  shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold, @cmdPrompt, @eatHexLambda)
-  shmIndexCmdPrompt  = UserPrompter.new("Shm index  ".bold, @cmdPrompt, @eatHexLambda)
+  shmChmCmdPrompt    = UserPrompter.new("Shm CMD    ".bold, @cmdPrompt)
+  shmCmdExdCmdPrompt = UserPrompter.new("Shm cmdExd ".bold, @cmdPrompt)
+  shmIndexCmdPrompt  = UserPrompter.new("Shm index  ".bold, @cmdPrompt)
 
   # Connecting extra prompts to main prompt loop
   @cmdPrompt >> {-> cmd {cmd.to_i.between? 160, 163} => shmChmCmdPrompt >> shmCmdExdCmdPrompt >> shmIndexCmdPrompt >> @arg2Prompt}
