@@ -78,12 +78,13 @@ class CmdHandler
       table << [{value: "Packet ID"                  , alignment: :left} , pa.to_s,                              {value: "Packet count, sender does ++"                ,alignment: :left} ]
       table << [{value: "Cmd ID"                     , alignment: :left} , ci.to_s,                              {value: "Command number/ID sent"                      ,alignment: :left} ]
       table << [{value: "#{"Cmd status".bold}"       , alignment: :left} , cs == 0 ? cs.to_s.green : cs.to_s.red,{value: errorDescription[cs] || "Undefined error".red ,alignment: :left} ]
-      table << [{value: "#{"Return value".bold.blue}", alignment: :left} , rv.to_s.bold.blue,                    {value: "Value returned".bold.blue                    ,alignment: :left} ]
+      table << [{value: "#{"Return val dec".bold.blue} ", alignment: :left} , rv.to_s.bold.blue,                  {value: "Value returned".bold.blue                    ,alignment: :left} ]
+      table << [{value: "#{"Return val hex".bold.blue} ", alignment: :left} , " 0x%08x ".upcase.bold.blue % rv,            {value: "Value returned".bold.blue                    ,alignment: :left} ]
       table << [{value: "Tag"                        , alignment: :left} , ta.to_s,                              {value: "Tag for each packets"                        ,alignment: :left} ]
       puts "Package Returned:".bg_blue
       puts table.render(:unicode, alignment: [:center])
     end
-
+# rv.to_s(16).upcase.bold.blue
   end
 
   private
@@ -137,3 +138,5 @@ class CmdHandler
 
 
 end
+
+# 10.0.100.129
