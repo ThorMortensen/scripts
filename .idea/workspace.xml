@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/scripts.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scripts.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autogit_paths.yml" beforeDir="false" afterPath="$PROJECT_DIR$/autogit_paths.yml" afterDir="false" />
-    </list>
+    <list default="true" id="a18ebf24-c167-49ab-b345-2d4c1d2bc5ce" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -279,7 +275,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -296,6 +291,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -509,11 +505,12 @@
       <workItem from="1537715056645" duration="14000" />
       <workItem from="1538230077632" duration="5000" />
       <workItem from="1539198081461" duration="599000" />
+      <workItem from="1541852043309" duration="5000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="258723000" />
+    <option name="totallyTimeSpent" value="258728000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -526,7 +523,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="25" width="1865" height="1055" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1924933" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.29978356" />
