@@ -1,5 +1,6 @@
 
 
+source ~/.commonrc
 
 alias +install_deb='sudo dpkg -i'
 alias +goto_newest_folder='cd $(ls -td -- */ | head -n 1)'
